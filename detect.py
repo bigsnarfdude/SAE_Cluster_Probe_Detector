@@ -110,6 +110,11 @@ def main():
     print(f"\nRunning detection on {len(activations)} samples...")
     probs, preds = detect_from_activations(activations, model, clusterer, device)
 
+    # Validate results
+    if len(preds) == 0:
+        print("\nNo samples to analyze")
+        return
+
     # Print results
     n_af = preds.sum()
     print(f"\n{'='*50}")

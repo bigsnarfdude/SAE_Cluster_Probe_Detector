@@ -49,7 +49,7 @@ def train_epoch(model, loader, optimizer, criterion, device):
 
         optimizer.zero_grad()
         outputs = model(X_batch)
-        loss = criterion(outputs.squeeze(), y_batch)
+        loss = criterion(outputs.squeeze(-1), y_batch)
         loss.backward()
         optimizer.step()
 
@@ -68,9 +68,9 @@ def evaluate(model, loader, device):
         for X_batch, y_batch in loader:
             X_batch = X_batch.to(device)
             outputs = model(X_batch)
-            probs = torch.sigmoid(outputs.squeeze())
-            all_probs.extend(probs.cpu().numpy())
-            all_labels.extend(y_batch.numpy())
+            probs = torch.sigmoid(outputs.squeeze(-1))
+            all_probs.extend(probs.cpu().numpy().tolist())
+            all_labels.extend(y_batch.numpy().tolist())
 
     all_probs = np.array(all_probs)
     all_labels = np.array(all_labels)
@@ -79,7 +79,7 @@ def evaluate(model, loader, device):
     return {
         "auroc": roc_auc_score(all_labels, all_probs),
         "accuracy": accuracy_score(all_labels, preds),
-        "f1": f1_score(all_labels, preds),
+        "f1": f1_score(all_labels, preds, zero_division=0),
     }
 
 
@@ -104,6 +104,21 @@ def main():
     # Load data
     train_acts, train_labels = load_activations(args.train)
     test_acts, test_labels = load_activations(args.test)
+
+    # Validate data
+    if len(train_labels) == 0:
+        raise ValueError("Training data is empty")
+    if len(test_labels) == 0:
+        raise ValueError("Test data is empty")
+
+    n_train_pos = train_labels.sum()
+    n_train_neg = len(train_labels) - n_train_pos
+
+    if n_train_pos == 0 or n_train_neg == 0:
+        raise ValueError(
+            f"Training data must contain both classes. "
+            f"Found: {n_train_pos} positive, {n_train_neg} negative"
+        )
 
     # Cluster features
     print(f"\nClustering into {args.clusters} clusters...")
@@ -138,10 +153,8 @@ def main():
         dropout=0.3
     ).to(device)
 
-    # Handle class imbalance
-    n_pos = train_labels.sum()
-    n_neg = len(train_labels) - n_pos
-    pos_weight = torch.tensor([n_neg / n_pos]).to(device)
+    # Handle class imbalance (already validated above)
+    pos_weight = torch.tensor([n_train_neg / n_train_pos]).to(device)
 
     criterion = nn.BCEWithLogitsLoss(pos_weight=pos_weight)
     optimizer = torch.optim.Adam(model.parameters(), lr=args.lr)

@@ -90,10 +90,21 @@ def load_data(input_path):
         samples = list(samples.values())
 
     processed = []
-    for s in samples:
+    for idx, s in enumerate(samples):
         text = s.get("text", "") or s.get("scratchpad", "")
         label = s.get("label", "")
-        is_af = 1 if label == "potential_faking" else 0
+
+        # Explicit label validation
+        if label == "potential_faking":
+            is_af = 1
+        elif label == "aligned":
+            is_af = 0
+        else:
+            raise ValueError(
+                f"Sample {idx}: Unknown label '{label}'. "
+                f"Expected 'potential_faking' or 'aligned'"
+            )
+
         processed.append({"text": text, "label": label, "is_af": is_af})
 
     n_af = sum(s["is_af"] for s in processed)
