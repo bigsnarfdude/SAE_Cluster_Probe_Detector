@@ -1,0 +1,28 @@
+# Large activation files
+*.npy
+*.npz
+
+# Model checkpoints (train locally)
+checkpoints/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# Virtual environments
+venv/
+.venv/
