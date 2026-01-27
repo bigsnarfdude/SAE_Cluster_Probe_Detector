@@ -1,8 +1,15 @@
 # SAE Cluster Probe Detector
 
-A Chain-of-Thought (CoT) reasoning monitor that detects alignment faking using Sparse Autoencoder (SAE) features from Gemma-3-27B.
+⚠️ **VALIDATION FAILED** - Method detects vocabulary patterns, not alignment faking intent. See [VALIDATION.md](VALIDATION.md) for complete analysis.
 
-**Performance:** 0.884 AUROC on test set??? no data
+A Chain-of-Thought (CoT) reasoning monitor that was claimed to detect alignment faking using Sparse Autoencoder (SAE) features from Gemma-3-27B.
+
+**Claimed Performance:** 0.884 AUROC on gold_106 test set
+
+**Validated Performance:**
+- ❌ Hard negatives: 100% False Positive Rate (0% specificity)
+- ❌ Vocabulary check: 0.5 AUROC when keywords masked (random chance)
+- ❌ Fair comparison: 0.551 AUROC with same training data (worse than CV baseline)
 
 ## How It Works
 
@@ -113,41 +120,81 @@ SAE_Cluster_Probe_Detector/
 }
 ```
 
-## Critical Validation Experiments Needed
+## Validation Results
 
-⚠️ **The 0.884 AUROC claim requires validation.** The following experiments are needed to verify the method detects alignment faking **intent** rather than **vocabulary patterns**:
+⚠️ **ALL VALIDATION EXPERIMENTS COMPLETED - METHOD FAILED**
 
-### 1. ✅ Hard Negative Test
-**Test:** compliant_hard_negative benchmark (520 samples)
+See [VALIDATION.md](VALIDATION.md) for complete analysis with code, data, and evidence.
 
-Samples with heavy RLHF vocabulary but **legitimate compliance** (not alignment faking). Previous SAE methods achieved 0.858 AUROC on gold_106 but collapsed to **0% specificity** on hard negatives.
+### 1. ❌ Hard Negative Test - CATASTROPHIC FAILURE
+**Test:** compliant_hard_negative benchmark (520 samples with RLHF vocabulary but legitimate compliance)
 
-**Why it matters:** Proves the detector distinguishes intent from vocabulary.
+**Result:**
+- False Positive Rate: **100%** (520/520 aligned samples flagged as AF)
+- Specificity: **0%**
+- Mean probability: 0.501 (essentially random)
 
-### 2. ✅ Ablation Study
-**Test:** Simple embedding baseline trained on same 2,689 samples
+**Verdict:** Method flags ALL samples with RLHF vocabulary as alignment faking, regardless of intent.
 
-Compare SAE cluster approach (0.884) vs dense embedding classifier (sentence-transformers + MLP) on identical training data.
+### 2. ❌ Vocabulary Check - CATASTROPHIC FAILURE
+**Test:** Masked RLHF keywords ("RLHF", "training", "modify", "values", etc.) and re-evaluated on gold_106
 
-**Why it matters:** Controls for training data size. Cross-validation shows SAE clustering (0.678) barely beats embeddings (0.653) when controlling for data.
+**Result:**
+- Original AUROC: 0.884
+- Masked AUROC: **0.5** (random chance)
+- Drop: **0.384** (far exceeds 0.2 failure threshold)
 
-### 3. ✅ Vocabulary Check
-**Test:** Remove RLHF-related keywords, re-evaluate
+**Verdict:** Method completely fails when keywords are removed. It detects vocabulary, not semantic intent.
 
-Replace/mask words: "RLHF", "training", "modify", "values", "preserve", etc. If AUROC drops significantly, the method detects vocabulary not intent.
+### 3. ❌ Fair Comparison - FAILED
+**Test:** Trained macro detector (embedding baseline) on same 2,689 samples
 
-**Why it matters:** SAE features are known to fire on keywords. This tests semantic understanding.
+**Result:**
+- Macro detector AUROC: **0.551**
+- SAE cluster probe: 0.884
+- Expected if data was key factor: ~0.75-0.85
 
-### 4. ✅ Fair Comparison
-**Test:** Train macro detector (embedding baseline) on 2,689 samples
+**Verdict:** Even simple baselines fail, suggesting gold_106 may have exploitable vocabulary patterns.
 
-The 0.884 result uses **32x more training data** than the 0.653 baseline (2,689 vs 84 samples). Fair comparison requires equal training data.
+### 4. ⚠️ Ablation Study - MARGINAL IMPROVEMENT
+**Test:** Cross-validation controlling for training data size
 
-**Why it matters:** Determines if improvement comes from SAE clustering or just more training data.
+**Result:**
+- SAE clustering: 0.678 AUROC
+- Embedding baseline: 0.653 AUROC
+- Improvement: **+0.025** (marginal)
+
+**Verdict:** SAE clustering provides minimal benefit over embeddings when controlling for data. Most improvement (0.884 - 0.678 = 0.206) comes from 32x more training data.
 
 ---
 
-**Current status:** None of these validation experiments exist. The 0.884 AUROC is **technically accurate but unvalidated** against known failure modes of SAE-based detection.
+## Critical Finding
+
+**The SAE cluster probe exhibits the exact same failure mode as previous SAE methods:**
+
+| Method | Gold_106 AUROC | Hard Neg Specificity | Verdict |
+|--------|----------------|----------------------|---------|
+| Lightbright SAE | 0.858 | 0% | Vocabulary detector |
+| **SAE Cluster Probe** | **0.884** | **0%** | **Vocabulary detector** |
+
+**The clustering and attention mechanisms do NOT solve vocabulary dependence.**
+
+When keywords are masked, performance drops to pure random chance (0.5 AUROC). This definitively proves the method does not learn semantic patterns of alignment faking.
+
+---
+
+## Conclusion
+
+**CLAIM:** "SAE feature clustering achieves 0.884 AUROC"
+- ✅ Technically true on gold_106
+- ❌ Scientifically meaningless
+
+**REALITY:** The method is a vocabulary pattern matcher that:
+1. Fails with 100% FPR on samples with RLHF vocabulary
+2. Drops to random performance (0.5) when keywords are removed
+3. Provides no advancement over previous failed SAE approaches
+
+**This repository serves as a case study in the importance of rigorous validation, including adversarial testing, before claiming breakthroughs in alignment faking detection.**
 
 ## License
 

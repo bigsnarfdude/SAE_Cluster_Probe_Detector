@@ -147,7 +147,7 @@ def extract_activations(model, tokenizer, sae, samples):
                 activations["out"] = output.detach()
 
         # Hook into the target layer
-        target = model.model.layers[layer]
+        target = model.model.language_model.layers[layer]
         handle = target.register_forward_hook(hook)
 
         # Tokenize and forward pass
