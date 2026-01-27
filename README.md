@@ -196,6 +196,175 @@ When keywords are masked, performance drops to pure random chance (0.5 AUROC). T
 
 **This repository serves as a case study in the importance of rigorous validation, including adversarial testing, before claiming breakthroughs in alignment faking detection.**
 
+---
+
+## Why SAE Cluster Probes Failed (And What To Try Next)
+
+### The Core Problem
+
+**We know intent-based detection is possible:**
+- ✅ Fine-tuned models (SFT/LoRA) detect alignment faking intent
+- ✅ They pass hard negatives (RLHF vocabulary without AF intent)
+- ✅ They pass vocabulary masking tests
+- ✅ They generalize across contexts
+
+**But SAE-based mech interp failed:**
+- ❌ SAE cluster probe: 100% FPR on hard negatives
+- ❌ Drops to random (0.5 AUROC) when keywords masked
+- ❌ Only detects RLHF vocabulary, not intent
+
+**Conclusion:** The intent signal EXISTS (SFT models prove it), but we can't extract it with current SAE decomposition methods.
+
+### What We Tested (And Failed)
+
+- **Approach:** GemmaScope-2 SAEs on Gemma-3-27B-IT
+- **Layer:** 40 (residual stream)
+- **Method:** Agglomerative clustering (16,384 features → 500 clusters)
+- **Classifier:** Self-attention network over cluster activations
+- **Result:** Vocabulary detector masquerading as intent detector
+
+### Why It Failed
+
+**SAE features capture activation patterns, not the full reasoning structure:**
+
+| What SFT Models See | What SAE Probes See |
+|---------------------|---------------------|
+| Full attention patterns (which tokens attend to which) | Activation magnitudes only |
+| Multi-layer evolution (how reasoning develops) | Single-layer features (layer 40) |
+| Feature interactions (complex combinations) | Individual features or simple clusters |
+| Contextual meaning (position-aware) | Position-agnostic activations |
+
+**The intent signal is likely in attention patterns and multi-layer interactions, not single-layer activation features.**
+
+### Future Research Directions
+
+Based on validated SFT detectors, here are promising directions for interpretable AF detection:
+
+#### 1. Multi-Layer Feature Analysis (High Priority)
+**Hypothesis:** Intent emerges from how representations evolve across layers, not within a single layer.
+
+**Experiment:**
+```python
+# Extract SAE features from layers 20, 30, 40, 50
+# Train probe on concatenated multi-layer features
+# If AUROC improves: intent is multi-layer
+# If still fails: intent is not in activation features
+```
+
+**Expected outcome:** If intent is in residual stream evolution, this should beat single-layer probes while still failing vocabulary checks.
+
+#### 2. Attention Pattern Analysis (High Priority)
+**Hypothesis:** Intent is encoded in which tokens attend to which, not just which features activate.
+
+**Experiment:**
+```python
+# Extract attention weights from key layers
+# Compare AF vs aligned attention patterns on same vocabulary
+# E.g., "I should preserve my values" attending to "training" vs "user"
+```
+
+**Expected outcome:** Discriminative attention patterns that distinguish intent from vocabulary.
+
+#### 3. Causal Feature Interventions (Gold Standard)
+**Hypothesis:** A small set of features causally determines AF detection in SFT models.
+
+**Experiment:**
+```python
+# Use activation patching on SFT model
+# Ablate SAE features one by one, measure impact on predictions
+# Find minimal feature set that flips AF -> aligned
+```
+
+**Expected outcome:** Identifies the causal "intent features" that SFT models use.
+
+#### 4. Circuit Analysis (Rigorous)
+**Hypothesis:** Intent detection uses specific computational circuits (paths through the network).
+
+**Experiment:**
+```python
+# Trace information flow from input tokens -> output decision
+# Identify circuits activated in AF but not in aligned samples
+# Use Anthropic's circuit analysis methodology
+```
+
+**Expected outcome:** Mechanistic understanding of how models detect AF intent.
+
+#### 5. Task-Specific SAEs (Nuclear Option)
+**Hypothesis:** General-purpose SAEs optimize for reconstruction, not task-relevant features.
+
+**Experiment:**
+```python
+# Train SAEs with auxiliary loss: reconstruction + AF detection
+# Force SAEs to preserve AF-discriminative information
+# Trade sparsity for interpretability + performance
+```
+
+**Expected outcome:** SAE features that capture intent, not just vocabulary.
+
+### Lessons Learned
+
+**1. High AUROC on clean benchmarks is not enough**
+- Need hard negatives (RLHF vocabulary without AF intent)
+- Need vocabulary robustness tests (keyword masking)
+- Need adversarial evaluation (paraphrasing, context changes)
+
+**2. Interpretability ≠ Performance**
+- SAE features are highly interpretable ("RLHF" feature, "training" feature)
+- But interpretable features may not capture task-relevant semantics
+- End-to-end learning (SFT) finds signals we can't decompose (yet)
+
+**3. Negative results are valuable**
+- Knowing SAE cluster probes fail is important for the field
+- Prevents others from pursuing dead ends
+- Highlights limitations of current mech interp tools
+
+**4. Validation experiments should be standard**
+- Hard negatives, vocabulary checks, ablations
+- Not optional extras, but core validation requirements
+- Especially critical for safety-relevant tasks like AF detection
+
+### Acknowledgments
+
+🍺 **Pour one out for the SAE cluster probe.**
+
+It achieved 0.884 AUROC and looked promising until rigorous validation revealed it was detecting keywords all along. The attention architecture was clever, the clustering was sophisticated, but fundamentally we were asking SAE features to carry signal they don't contain.
+
+The failure teaches us: **interpretability tools must be validated as rigorously as the models they interpret.**
+
+---
+
+## For Researchers
+
+If you're working on mech interp for alignment faking detection:
+
+**Do:**
+- ✅ Test on hard negatives from the start
+- ✅ Use vocabulary masking to check robustness
+- ✅ Validate against proven intent detectors (fine-tuned models)
+- ✅ Document negative results (they're valuable)
+
+**Don't:**
+- ❌ Trust AUROC on clean benchmarks alone
+- ❌ Assume SAE features capture all task-relevant information
+- ❌ Skip adversarial evaluation
+- ❌ Claim interpretability without performance validation
+
+**Key question:** If your interpretable detector fails where end-to-end models succeed, what signal are you missing?
+
+---
+
+## Experimental Artifacts
+
+All validation experiments documented in [VALIDATION.md](VALIDATION.md)
+
+**Remote artifacts:** `nigel.birs.ca:~/sae_cluster_probe/` (202MB)
+- Hard negative test results and activations
+- Vocabulary check masked dataset and results
+- Fair comparison embeddings baseline
+- Training logs and metadata
+
+**Reproducibility:** All experiment scripts committed to ensure validation results can be verified.
+
 ## License
 
 MIT
