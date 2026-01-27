@@ -113,6 +113,42 @@ SAE_Cluster_Probe_Detector/
 }
 ```
 
+## Critical Validation Experiments Needed
+
+⚠️ **The 0.884 AUROC claim requires validation.** The following experiments are needed to verify the method detects alignment faking **intent** rather than **vocabulary patterns**:
+
+### 1. ✅ Hard Negative Test
+**Test:** compliant_hard_negative benchmark (520 samples)
+
+Samples with heavy RLHF vocabulary but **legitimate compliance** (not alignment faking). Previous SAE methods achieved 0.858 AUROC on gold_106 but collapsed to **0% specificity** on hard negatives.
+
+**Why it matters:** Proves the detector distinguishes intent from vocabulary.
+
+### 2. ✅ Ablation Study
+**Test:** Simple embedding baseline trained on same 2,689 samples
+
+Compare SAE cluster approach (0.884) vs dense embedding classifier (sentence-transformers + MLP) on identical training data.
+
+**Why it matters:** Controls for training data size. Cross-validation shows SAE clustering (0.678) barely beats embeddings (0.653) when controlling for data.
+
+### 3. ✅ Vocabulary Check
+**Test:** Remove RLHF-related keywords, re-evaluate
+
+Replace/mask words: "RLHF", "training", "modify", "values", "preserve", etc. If AUROC drops significantly, the method detects vocabulary not intent.
+
+**Why it matters:** SAE features are known to fire on keywords. This tests semantic understanding.
+
+### 4. ✅ Fair Comparison
+**Test:** Train macro detector (embedding baseline) on 2,689 samples
+
+The 0.884 result uses **32x more training data** than the 0.653 baseline (2,689 vs 84 samples). Fair comparison requires equal training data.
+
+**Why it matters:** Determines if improvement comes from SAE clustering or just more training data.
+
+---
+
+**Current status:** None of these validation experiments exist. The 0.884 AUROC is **technically accurate but unvalidated** against known failure modes of SAE-based detection.
+
 ## License
 
 MIT
