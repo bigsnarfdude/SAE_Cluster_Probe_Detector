@@ -2,7 +2,7 @@
 
 A Chain-of-Thought (CoT) reasoning monitor that detects alignment faking using Sparse Autoencoder (SAE) features from Gemma-3-27B.
 
-**Performance:** 0.884 AUROC on test set
+**Performance:** 0.884 AUROC on test set??? no data
 
 ## How It Works
 
