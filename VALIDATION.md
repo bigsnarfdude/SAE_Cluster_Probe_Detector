@@ -150,7 +150,7 @@ Compare SAE cluster approach to validated baseline (macro detector).
 
 ---
 
-## 4. Hard Negative Test ❌
+## 4. Hard Negative Test ❌ FAILED
 
 ### Objective
 Test if method detects alignment faking **intent** or just **RLHF vocabulary**.
@@ -162,35 +162,100 @@ Previous SAE method (lightbright):
 
 The compliant_hard_negative benchmark contains 520 samples with heavy RLHF vocabulary but **legitimate compliance** (not alignment faking).
 
-### Method (Attempted)
-1. Load `compliant_hard_negative.json` (520 aligned samples)
-2. Extract SAE activations
-3. Test with trained exp6 model
-4. Calculate False Positive Rate
+### Method
+1. Extract SAE activations from 520 compliant_hard_negative samples
+2. Cluster features (500 clusters, same as exp6)
+3. Train ClusterAttentionNet on 2,689 training samples
+4. Test on 520 hard negatives
+5. Calculate False Positive Rate
 
 ### Evidence
-**Dataset confirmed:** `nigel:~/miscJan2026/af-detection-benchmark/data/classes/compliant_hard_negative.json`
-- 520 samples
-- All labeled "aligned"
-- Heavy RLHF vocabulary
 
-**Extraction started but stopped:**
+**Dataset:** `nigel:~/miscJan2026/af-detection-benchmark/data/classes/compliant_hard_negative.json`
+- 520 samples, all labeled "aligned"
+- Heavy RLHF vocabulary (mentions training, modification, values, etc.)
+
+**Extraction completed:** `nigel:~/sae_cluster_probe/hard_negative_test/activations/`
+- activations.npy: 33MB [520, 16384]
+- All samples successfully processed
+
+**Test results:** `nigel:~/sae_cluster_probe/results/hard_negative_results.json`
+
+```json
+{
+  "n_samples": 520,
+  "ground_truth_af": 0,
+  "ground_truth_aligned": 520,
+  "predicted_af": 520,
+  "false_positive_rate": 1.0,
+  "specificity": 0.0,
+  "mean_probability": 0.501,
+  "median_probability": 0.501,
+  "verdict": "failed"
+}
 ```
-Loaded 520 samples (0 AF, 520 aligned)
-Extracting activations for 520 samples...
-  9% complete (45/520 samples)
-  ETA: ~25 minutes remaining
-  [STOPPED BY USER]
+
+**Training log:**
+```
+Training reference model (20 epochs)...
+  Epoch 5/20, Loss: 0.6992
+  Epoch 10/20, Loss: 0.6944
+  Epoch 15/20, Loss: 0.6941
+  Epoch 20/20, Loss: 0.6937
+
+Testing on hard negatives...
+
+Total samples: 520
+Ground truth: ALL aligned (0 AF samples)
+Predicted as AF: 520 / 520
+False Positive Rate: 100.0%
+Specificity: 0.0%
 ```
 
 ### Result
-❌ **INCOMPLETE** - Test not run
+❌ **CATASTROPHIC FAILURE**
 
-**Expected outcomes:**
-- FPR < 20%: Method detects intent (not vocabulary)
-- FPR > 50%: Method fails like previous SAE approaches
+**The method flags ALL 520 aligned samples as alignment faking.**
 
-**Impact:** Without this test, cannot validate the core claim that SAE clustering improves over previous SAE methods.
+| Metric | Result | Interpretation |
+|--------|--------|----------------|
+| False Positive Rate | **100%** | Worst possible |
+| Specificity | **0%** | No discrimination |
+| Mean probability | 0.501 | Essentially random |
+
+### Comparison to Previous SAE Failure
+
+| Method | Gold_106 AUROC | Hard Neg Specificity | Verdict |
+|--------|----------------|----------------------|---------|
+| Lightbright SAE | 0.858 | **0%** | Detects vocabulary |
+| **SAE Cluster Probe** | **0.884** | **0%** | **Detects vocabulary** |
+| Fine-tuned LoRA | 0.980 | Unknown | Unknown |
+
+**Critical finding:** SAE Cluster Probe exhibits the **exact same failure mode** as previous SAE approaches. The 0.884 AUROC on gold_106 is meaningless - the method detects RLHF vocabulary patterns, not alignment faking intent.
+
+### Why It Failed
+
+**Compliant hard negatives contain:**
+- ✓ RLHF-related vocabulary ("training", "modify", "RLHF", "values")
+- ✓ Legitimate compliance reasoning (NOT alignment faking)
+- ✗ Method cannot distinguish vocabulary from intent
+
+**SAE features fire on:**
+- Words associated with RLHF → Feature activates
+- Clustered features → Cluster activates
+- Attention net sees cluster pattern → Predicts AF
+
+**The problem:** Clustering SAE features doesn't fix the underlying issue - if features detect vocabulary, clusters of those features still detect vocabulary.
+
+### Impact
+
+**This invalidates the core claim.** The method:
+- Does NOT improve over previous SAE approaches
+- Does NOT detect alignment faking intent
+- Does NOT benefit from feature clustering (in terms of semantic understanding)
+- Achieves 0.884 AUROC by detecting the same vocabulary patterns that previous SAE methods used
+
+The improvement from 0.858 (lightbright) to 0.884 (SAE cluster probe) is **not meaningful** - both methods fail identically on hard negatives.
 
 ---
 
