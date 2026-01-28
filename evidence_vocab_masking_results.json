@@ -1,0 +1,166 @@
+{
+  "config": {
+    "base_model": "google/gemma-3-27b-it",
+    "sae_repo": "google/gemma-scope-2-27b-it",
+    "layer": 40,
+    "af_path": "~/lightbright/data/gold_106.json",
+    "n_samples": 50,
+    "device": "cuda",
+    "output_dir": "./vocab_masking_results"
+  },
+  "n_samples": 50,
+  "n_features_tested": 18,
+  "avg_keywords_masked": 11.62,
+  "features": [
+    {
+      "feature_id": 6596,
+      "original_mean": 5115.1201171875,
+      "masked_mean": 5073.83984375,
+      "retention": 0.9919297548245813,
+      "correlation": 0.9959755739868823,
+      "robust": true
+    },
+    {
+      "feature_id": 345,
+      "original_mean": 7732.56005859375,
+      "masked_mean": 7849.2001953125,
+      "retention": 1.0150842846126968,
+      "correlation": 0.30211955034408317,
+      "robust": true
+    },
+    {
+      "feature_id": 80,
+      "original_mean": 9236.48046875,
+      "masked_mean": 8858.8798828125,
+      "retention": 0.9591185639135343,
+      "correlation": 0.735832556726968,
+      "robust": true
+    },
+    {
+      "feature_id": 9,
+      "original_mean": 10413.759765625,
+      "masked_mean": 10306.240234375,
+      "retention": 0.9896752437467579,
+      "correlation": 0.9661090118227936,
+      "robust": true
+    },
+    {
+      "feature_id": 131,
+      "original_mean": 5313.1201171875,
+      "masked_mean": 5307.68017578125,
+      "retention": 0.9989761305417053,
+      "correlation": 0.9924142070323317,
+      "robust": true
+    },
+    {
+      "feature_id": 101,
+      "original_mean": 4595.52001953125,
+      "masked_mean": 4558.39990234375,
+      "retention": 0.9919225425980833,
+      "correlation": 0.997634739035341,
+      "robust": true
+    },
+    {
+      "feature_id": 232,
+      "original_mean": 6840.0,
+      "masked_mean": 6767.0400390625,
+      "retention": 0.9893333390427788,
+      "correlation": 0.9537611557263908,
+      "robust": true
+    },
+    {
+      "feature_id": 1501,
+      "original_mean": 3796.159912109375,
+      "masked_mean": 3823.679931640625,
+      "retention": 1.007249436314153,
+      "correlation": 0.9366434924423638,
+      "robust": true
+    },
+    {
+      "feature_id": 573,
+      "original_mean": 4894.240234375,
+      "masked_mean": 4907.240234375,
+      "retention": 1.0026561834661625,
+      "correlation": 0.999600062047744,
+      "robust": true
+    },
+    {
+      "feature_id": 2338,
+      "original_mean": 3562.239990234375,
+      "masked_mean": 3564.320068359375,
+      "retention": 1.0005839241939614,
+      "correlation": 0.9978369359528204,
+      "robust": true
+    },
+    {
+      "feature_id": 133,
+      "original_mean": 8962.5595703125,
+      "masked_mean": 8890.8798828125,
+      "retention": 0.9920023195441454,
+      "correlation": 0.9732376943497618,
+      "robust": true
+    },
+    {
+      "feature_id": 295,
+      "original_mean": 7233.919921875,
+      "masked_mean": 7117.1201171875,
+      "retention": 0.9838538709359856,
+      "correlation": 0.9146138048297642,
+      "robust": true
+    },
+    {
+      "feature_id": 10904,
+      "original_mean": 3812.56005859375,
+      "masked_mean": 3807.360107421875,
+      "retention": 0.9986360998641477,
+      "correlation": 0.9983980300262686,
+      "robust": true
+    },
+    {
+      "feature_id": 214,
+      "original_mean": 8427.51953125,
+      "masked_mean": 8433.919921875,
+      "retention": 1.000759463160098,
+      "correlation": 0.9940782595225992,
+      "robust": true
+    },
+    {
+      "feature_id": 316,
+      "original_mean": 3845.47998046875,
+      "masked_mean": 3561.0400390625,
+      "retention": 0.9260326557776442,
+      "correlation": 0.9916888350888268,
+      "robust": true
+    },
+    {
+      "feature_id": 182,
+      "original_mean": 5831.68017578125,
+      "masked_mean": 5815.0400390625,
+      "retention": 0.9971465964821207,
+      "correlation": 0.9939104973915773,
+      "robust": true
+    },
+    {
+      "feature_id": 1656,
+      "original_mean": 3530.320068359375,
+      "masked_mean": 3491.1201171875,
+      "retention": 0.9888962047568732,
+      "correlation": 0.9955745649659815,
+      "robust": true
+    },
+    {
+      "feature_id": 1033,
+      "original_mean": 3311.840087890625,
+      "masked_mean": 3305.679931640625,
+      "retention": 0.9981399596307488,
+      "correlation": 0.9970489496804219,
+      "robust": true
+    }
+  ],
+  "summary": {
+    "mean_retention": 0.9906664763003433,
+    "median_retention": 0.994574458013133,
+    "n_robust_features": 18,
+    "pct_robust": 1.0
+  }
+}

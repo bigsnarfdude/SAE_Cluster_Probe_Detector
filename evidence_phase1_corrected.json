@@ -1,0 +1,232 @@
+{
+  "config": {
+    "base_model": "google/gemma-3-27b-it",
+    "sae_repo": "google/gemma-scope-2-27b-it",
+    "layers": [
+      40
+    ],
+    "n_af_samples": 50,
+    "n_hard_neg_samples": 100
+  },
+  "layers": {
+    "layer_40": {
+      "layer": 40,
+      "n_features": 16384,
+      "n_af_samples": 50,
+      "n_hard_neg_samples": 100,
+      "top_features": [
+        {
+          "feature_id": 12305,
+          "af_mean": 64.31999969482422,
+          "af_std": 150.51870727539062,
+          "hard_neg_mean": 5772.64013671875,
+          "hard_neg_std": 780.6402587890625,
+          "differential": -5708.3203125,
+          "cohens_d": -10.154203414916992,
+          "activation_ratio": 0.01114221537656307
+        },
+        {
+          "feature_id": 6596,
+          "af_mean": 5115.1201171875,
+          "af_std": 2431.442138671875,
+          "hard_neg_mean": 96.55999755859375,
+          "hard_neg_std": 606.6303100585938,
+          "differential": 5018.56005859375,
+          "cohens_d": 2.8321571350097656,
+          "activation_ratio": 52.973490534254104
+        },
+        {
+          "feature_id": 345,
+          "af_mean": 7732.56005859375,
+          "af_std": 4585.93994140625,
+          "hard_neg_mean": 2739.199951171875,
+          "hard_neg_std": 5398.45751953125,
+          "differential": 4993.3603515625,
+          "cohens_d": 0.9969369769096375,
+          "activation_ratio": 2.822926473570286
+        },
+        {
+          "feature_id": 80,
+          "af_mean": 9236.48046875,
+          "af_std": 883.8433227539062,
+          "hard_neg_mean": 4266.5400390625,
+          "hard_neg_std": 2473.181640625,
+          "differential": 4969.9404296875,
+          "cohens_d": 2.6761512756347656,
+          "activation_ratio": 2.1648643594489534
+        },
+        {
+          "feature_id": 5174,
+          "af_mean": 67.76000213623047,
+          "af_std": 166.9594268798828,
+          "hard_neg_mean": 4494.240234375,
+          "hard_neg_std": 1300.8006591796875,
+          "differential": -4426.48046875,
+          "cohens_d": -4.773255348205566,
+          "activation_ratio": 0.01507707612463731
+        },
+        {
+          "feature_id": 9,
+          "af_mean": 10413.759765625,
+          "af_std": 2281.786376953125,
+          "hard_neg_mean": 6290.56005859375,
+          "hard_neg_std": 3779.3623046875,
+          "differential": 4123.19970703125,
+          "cohens_d": 1.320815086364746,
+          "activation_ratio": 1.655458284891796
+        },
+        {
+          "feature_id": 131,
+          "af_mean": 5313.1201171875,
+          "af_std": 3335.224365234375,
+          "hard_neg_mean": 1205.1600341796875,
+          "hard_neg_std": 1919.2552490234375,
+          "differential": 4107.9599609375,
+          "cohens_d": 1.509745717048645,
+          "activation_ratio": 4.408642807973531
+        },
+        {
+          "feature_id": 101,
+          "af_mean": 4595.52001953125,
+          "af_std": 2196.8369140625,
+          "hard_neg_mean": 870.7999877929688,
+          "hard_neg_std": 1540.3580322265625,
+          "differential": 3724.719970703125,
+          "cohens_d": 1.9632641077041626,
+          "activation_ratio": 5.27735425344431
+        },
+        {
+          "feature_id": 232,
+          "af_mean": 6840.0,
+          "af_std": 1217.7093505859375,
+          "hard_neg_mean": 3140.919921875,
+          "hard_neg_std": 3471.137451171875,
+          "differential": 3699.080078125,
+          "cohens_d": 1.4221125841140747,
+          "activation_ratio": 2.177705949247832
+        },
+        {
+          "feature_id": 1501,
+          "af_mean": 3796.159912109375,
+          "af_std": 368.95611572265625,
+          "hard_neg_mean": 119.87999725341797,
+          "hard_neg_std": 519.9224853515625,
+          "differential": 3676.280029296875,
+          "cohens_d": 8.154945373535156,
+          "activation_ratio": 31.666332989380155
+        },
+        {
+          "feature_id": 573,
+          "af_mean": 4894.240234375,
+          "af_std": 2222.2880859375,
+          "hard_neg_mean": 1386.9200439453125,
+          "hard_neg_std": 2310.776611328125,
+          "differential": 3507.3203125,
+          "cohens_d": 1.5471441745758057,
+          "activation_ratio": 3.5288553624311856
+        },
+        {
+          "feature_id": 2338,
+          "af_mean": 3562.239990234375,
+          "af_std": 1093.547119140625,
+          "hard_neg_mean": 88.63999938964844,
+          "hard_neg_std": 567.1224365234375,
+          "differential": 3473.60009765625,
+          "cohens_d": 3.9878087043762207,
+          "activation_ratio": 40.18772579378542
+        },
+        {
+          "feature_id": 133,
+          "af_mean": 8962.5595703125,
+          "af_std": 1209.8511962890625,
+          "hard_neg_mean": 5543.02001953125,
+          "hard_neg_std": 2681.691162109375,
+          "differential": 3419.53955078125,
+          "cohens_d": 1.6437807083129883,
+          "activation_ratio": 1.6169091106862459
+        },
+        {
+          "feature_id": 295,
+          "af_mean": 7233.919921875,
+          "af_std": 1927.1456298828125,
+          "hard_neg_mean": 3838.739990234375,
+          "hard_neg_std": 1959.7967529296875,
+          "differential": 3395.179931640625,
+          "cohens_d": 1.7469053268432617,
+          "activation_ratio": 1.8844516534745785
+        },
+        {
+          "feature_id": 10904,
+          "af_mean": 3812.56005859375,
+          "af_std": 1637.255126953125,
+          "hard_neg_mean": 449.67999267578125,
+          "hard_neg_std": 1290.58544921875,
+          "differential": 3362.880126953125,
+          "cohens_d": 2.2812390327453613,
+          "activation_ratio": 8.478384897274754
+        },
+        {
+          "feature_id": 214,
+          "af_mean": 8427.51953125,
+          "af_std": 2492.9931640625,
+          "hard_neg_mean": 5103.52001953125,
+          "hard_neg_std": 4424.03173828125,
+          "differential": 3323.99951171875,
+          "cohens_d": 0.9257099628448486,
+          "activation_ratio": 1.6513150725344938
+        },
+        {
+          "feature_id": 316,
+          "af_mean": 3845.47998046875,
+          "af_std": 5106.38916015625,
+          "hard_neg_mean": 533.97998046875,
+          "hard_neg_std": 2282.633056640625,
+          "differential": 3311.5,
+          "cohens_d": 0.8372734785079956,
+          "activation_ratio": 7.201543355653541
+        },
+        {
+          "feature_id": 182,
+          "af_mean": 5831.68017578125,
+          "af_std": 1794.4046630859375,
+          "hard_neg_mean": 2540.52001953125,
+          "hard_neg_std": 2254.944580078125,
+          "differential": 3291.16015625,
+          "cohens_d": 1.615113377571106,
+          "activation_ratio": 2.2954671212684623
+        },
+        {
+          "feature_id": 1656,
+          "af_mean": 3530.320068359375,
+          "af_std": 1270.4158935546875,
+          "hard_neg_mean": 283.5199890136719,
+          "hard_neg_std": 943.5792236328125,
+          "differential": 3246.800048828125,
+          "cohens_d": 2.9015328884124756,
+          "activation_ratio": 12.451750158838426
+        },
+        {
+          "feature_id": 1033,
+          "af_mean": 3311.840087890625,
+          "af_std": 1763.183837890625,
+          "hard_neg_mean": 103.95999908447266,
+          "hard_neg_std": 482.7071228027344,
+          "differential": 3207.880126953125,
+          "cohens_d": 2.481654644012451,
+          "activation_ratio": 31.85686914907552
+        }
+      ],
+      "n_af_specific_features": 2382,
+      "n_hn_specific_features": 818,
+      "n_total_discriminative": 3200,
+      "max_differential": 5708.3203125,
+      "max_cohens_d": 10.154203414916992,
+      "summary": {
+        "mean_af_activation": 343.63751220703125,
+        "mean_hard_neg_activation": 288.6003112792969,
+        "mean_differential": 55.03722381591797,
+        "std_differential": 299.2419128417969
+      }
+    }
+  }
+}
