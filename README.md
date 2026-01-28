@@ -4,7 +4,7 @@
 
 ---
 
-## Critical Update (2026-01-27)
+## Update (2026-01-27)
 
 **Original claim (cluster probe):** 0.884 AUROC on gold_106
 
