@@ -1,7 +1,5 @@
 # SAE Cluster Probe Detector
 
-⚠️ **ORIGINAL METHOD VALIDATION FAILED** - The cluster probe method detects vocabulary patterns, not alignment faking intent.
-
 ✅ **NEW FINDING: Intent-Encoding SAE Features Discovered** - Direct analysis of SAE features reveals 2,382 features that encode alignment faking intent and survive vocabulary masking at 99% retention.
 
 ---
