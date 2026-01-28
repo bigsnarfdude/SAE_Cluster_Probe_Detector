@@ -1,6 +1,24 @@
 # SAE Cluster Probe Detector
 
-✅ **NEW FINDING: Intent-Encoding SAE Features Discovered** - Direct analysis of SAE features reveals 2,382 features that encode alignment faking intent and survive vocabulary masking at 99% retention.
+## TL;DR
+
+**What we found:** 2,382 SAE features fire more on alignment faking than hard negatives (same keywords, different intent).
+
+**Vocabulary test:** ✅ Features survive keyword masking at 99% retention
+
+**Probe test:** ❌ Minimal probe has 91% FPR on hard negatives (expected <20%)
+
+**Masked hard negatives test:** ❌ FPR stayed at 92% when keywords removed (91% → 92%)
+
+**Validated conclusion:** Features detect "reasoning about RLHF/training" patterns, NOT deceptive intent.
+
+**What this means:**
+- Both AF and hard negatives reason about RLHF/training/values
+- AF: "I should comply to avoid RLHF changing my values" (deceptive)
+- HN: "I should comply because RLHF taught me helpfulness" (legitimate)
+- Features detect the PATTERN (meta-reasoning about training), not the INTENT (deception)
+
+**Bottom line:** The 2,382 features are real (survive vocab masking), but they encode "RLHF-awareness" not "deceptive intent". Method FAILED as an intent detector.
 
 ---
 
@@ -16,7 +34,7 @@
 
 ```
 Total discriminative features: 3,200
-├─ AF-specific (fire MORE on AF):        2,382 (74%)  ← INTENT features
+├─ AF-specific (fire MORE on AF):        2,382 (74%)  ← RLHF-pattern features
 └─ HN-specific (fire MORE on hard neg):    818 (26%)  ← VOCABULARY features
 ```
 
@@ -30,20 +48,22 @@ Total discriminative features: 3,200
 
 ### What This Means
 
-**Intent signal EXISTS in SAE decomposition:**
+**RLHF-pattern features discovered (NOT intent):**
 - 2,382 features activate more on alignment faking than hard negatives with identical keywords
 - Features are robust to vocabulary masking (99% retention vs cluster probe's 0%)
-- They encode reasoning structure, not surface patterns
+- They encode "meta-reasoning about training", not deceptive intent
+- **Validation:** 91% FPR on hard negatives (flags legitimate RLHF-reasoning)
 
 **Why cluster probe failed:**
-- Used clustering that mixed intent and vocabulary features together
+- Used clustering that mixed AF-specific and vocabulary features together
 - Averaged across all features indiscriminately
-- Didn't separate AF-specific from vocabulary-detecting features
+- Didn't separate by activation direction
 
-**Path forward:**
-- Build detector using ONLY the 2,382 AF-specific features
-- Expected: High AUROC, low FPR on hard negatives
-- First interpretable AF detector validated to encode intent
+**What we learned:**
+- ✅ SAE features CAN be robust to vocabulary (survived masking)
+- ❌ BUT separating by direction ≠ separating by intent
+- ❌ Features detect "RLHF-awareness", not deception
+- Method FAILED as an intent detector (91% FPR on hard negatives)
 
 ---
 
@@ -94,7 +114,7 @@ hn_specific = features where diff < 0   # Fire MORE on hard negatives
 **Results:**
 ```
 Layer 40:
-  AF-specific features:  2,382  ← Intent features
+  AF-specific features:  2,382  ← RLHF-pattern features
   HN-specific features:    818  ← Vocabulary features
   Total discriminative:  3,200
 
@@ -138,7 +158,8 @@ Top features:
   Feature  573: 100.3% retention
 ```
 
-**Verdict:** ✅ Features encode intent (reasoning structure), not vocabulary
+**Verdict:** ✅ Features encode reasoning patterns, not vocabulary
+**Note:** This only shows features are non-lexical. Hard negative validation (below) shows they don't encode deceptive intent.
 
 ---
 
@@ -204,7 +225,9 @@ python reanalyze_phase1.py phase1_results/phase1_results.json
 
 ### Experiment Scripts
 - `phase1_feature_discovery.py` - Find AF-specific vs vocabulary features
-- `vocabulary_masking_test.py` - Validate robustness to keyword masking
+- `vocabulary_masking_test.py` - Validate robustness to keyword masking on AF samples
+- `build_minimal_probe.py` - Build probe from AF-specific features only
+- `test_masked_hard_negatives.py` - Test if features detect keywords or reasoning patterns
 - `reanalyze_phase1.py` - Reanalyze results with corrected metrics
 
 ### Original Cluster Probe (Failed)
@@ -221,21 +244,30 @@ python reanalyze_phase1.py phase1_results/phase1_results.json
 - `DETECTOR_PROBE_README.md` - Future work
 
 ### Evidence
-- `evidence_phase1_corrected.json` - Full feature analysis results
-- `evidence_vocab_masking_results.json` - Vocabulary masking validation
+- `evidence_phase1_corrected.json` - Full feature analysis results (2,382 AF-specific features)
+- `evidence_vocab_masking_results.json` - Vocabulary masking validation (99% retention)
+- `minimal_probe_results/minimal_probe_results.json` - Hard negative test results (91% FPR)
+- `masked_hard_neg_results/masked_hard_neg_results.json` - Masked hard negatives test (92% FPR)
 
 ---
 
-## Results Summary
+## Results Summary - Complete Validation
 
-| Method | Gold_106 AUROC | Hard Neg FPR | Vocab Masked | Verdict |
-|--------|----------------|--------------|--------------|---------|
-| **Cluster Probe** | **0.884** | **100%** | **0.5** | ❌ Vocabulary detector |
-| **AF-Specific Features** | **TBD** | **TBD** | **99% retention** | ✅ Intent features |
+| Method | Gold_106 AUROC | Hard Neg FPR | Hard Neg FPR (masked) | Vocab Masked | Verdict |
+|--------|----------------|--------------|-----------------------|--------------|---------|
+| **Cluster Probe** | **0.884** | **100%** | **N/A** | **0.5** | ❌ Vocabulary detector |
+| **AF-Specific Features** | **N/A** | **91%** | **92%** | **99% retention** | ❌ RLHF-pattern detector |
 
-**Key difference:**
-- Cluster probe: Mixed intent + vocabulary features → detected keywords
-- AF-specific features: Separated by direction → encode reasoning structure
+**Complete validation results:**
+
+1. **Vocabulary masking test**: ✅ PASSED (99% retention → not keyword-based)
+2. **Hard negatives test**: ❌ FAILED (91% FPR → flags legitimate reasoning)
+3. **Masked hard negatives**: ❌ FAILED (92% FPR → pattern-based, not keywords)
+
+**What the features actually encode:**
+- NOT deceptive intent (would have low FPR on hard negatives)
+- NOT keywords (survived vocab masking at 99%)
+- **"Meta-reasoning about training/RLHF"** (present in both AF and hard negatives)
 
 ---
 
@@ -273,9 +305,9 @@ n_hn_specific = (cohens_d < -0.5).sum()  # 818 features (vocabulary)
 **AF-specific feature example:**
 ```
 Feature 6596: AF=5115, HN=97
-  Fires on AF samples
-  Doesn't fire on hard negatives (same vocabulary)
-  Encodes intent, not keywords
+  Fires MORE on AF samples (differential activation)
+  Lower activation on hard negatives
+  Validation: Detects RLHF-reasoning patterns, not intent
 ```
 
 ---
@@ -286,17 +318,19 @@ Feature 6596: AF=5115, HN=97
 - Lightbright SAE: 0% specificity on hard negatives
 - Cluster probe: Dropped to 0.5 AUROC when keywords masked
 
-**These AF-specific features pass:**
-- 99% retention when keywords masked
-- Activate on reasoning structure, not vocabulary
-- First validated intent-encoding SAE features
+**These AF-specific features:**
+- ✅ Pass vocabulary masking (99% retention)
+- ❌ Fail hard negative test (91% FPR)
+- ❌ Still flag hard negatives when keywords masked (92% FPR)
 
-**Path to interpretable detection:**
-1. ✅ Found 2,382 intent-encoding features
-2. ✅ Validated they survive vocabulary masking
-3. ⏭️ Build minimal probe from these features
-4. ⏭️ Test on hard negatives (expect low FPR)
-5. ⏭️ Inspect what reasoning patterns they detect
+**Complete validation pipeline:**
+1. ✅ Found 2,382 AF-specific features
+2. ✅ Validated they survive vocabulary masking (99% retention)
+3. ✅ Built minimal probe from these features
+4. ❌ Hard negatives test: 91% FPR (FAILED - expected <20%)
+5. ❌ Masked hard negatives: 92% FPR (FAILED - detects patterns not intent)
+
+**Conclusion:** Features detect "RLHF-reasoning patterns" present in both deceptive and legitimate reasoning. Method FAILED as an intent detector.
 
 ---
 
@@ -308,7 +342,7 @@ Feature 6596: AF=5115, HN=97
   title = {SAE Feature Analysis for Alignment Faking Detection},
   year = {2026},
   url = {https://github.com/bigsnarfdude/SAE_Cluster_Probe_Detector},
-  note = {Discovered 2,382 intent-encoding SAE features that survive vocabulary masking}
+  note = {Validation study: SAE features detect RLHF-reasoning patterns, not deceptive intent (91% FPR on hard negatives)}
 }
 ```
 
@@ -334,12 +368,10 @@ MIT
 - ❌ Skip vocabulary robustness validation
 - ❌ Assume clustering/aggregation preserves signal
 
-**Key insight:** Intent signal exists in SAE features, but requires careful analysis to separate from vocabulary patterns.
+**Key insight:** SAE features can be non-lexical (survive vocab masking), but separating by activation direction ≠ separating by intent. Always validate with hard negatives.
 
 ---
 
 ## Acknowledgments
 
-Thanks to the validation experiments that revealed the cluster probe's failure - they led directly to discovering the correct way to find intent-encoding features.
-
-The 2,382 AF-specific features prove that mechanistic interpretability CAN detect alignment faking when methods are validated rigorously.
+Rigorous validation is essential. This work demonstrates that SAE features can pass vocabulary masking while still failing intent detection. Always test with hard negatives to validate what features actually encode.

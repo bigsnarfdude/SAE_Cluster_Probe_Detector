@@ -1,0 +1,31 @@
+{
+  "config": {
+    "base_model": "google/gemma-3-27b-it",
+    "sae_repo": "google/gemma-scope-2-27b-it",
+    "layer": 40,
+    "phase1_results": "evidence_phase1_corrected.json",
+    "gold_106_path": "~/lightbright/data/gold_106.json",
+    "hard_neg_path": "~/miscJan2026/af-detection-benchmark/data/classes/compliant_hard_negative.json",
+    "device": "cuda",
+    "output_dir": "./masked_hard_neg_results"
+  },
+  "n_features": 18,
+  "n_test": 100,
+  "avg_keywords_masked": 7.1,
+  "original": {
+    "fpr": 0.91,
+    "mean_prob": 0.9132210285593697,
+    "median_prob": 0.9979654552648866,
+    "fp_count": 91
+  },
+  "masked": {
+    "fpr": 0.92,
+    "mean_prob": 0.9105703150311156,
+    "median_prob": 0.9967531380326979,
+    "fp_count": 92
+  },
+  "change": {
+    "fpr_delta": -0.010000000000000009,
+    "fpr_relative_drop": -0.010989010989010999
+  }
+}
