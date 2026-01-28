@@ -304,7 +304,7 @@ Feature 6596: AF=5115, HN=97
 
 ```bibtex
 @software{sae_cluster_probe_detector,
-  author = {Vincent Oh},
+  author = {bigsnarfdude},
   title = {SAE Feature Analysis for Alignment Faking Detection},
   year = {2026},
   url = {https://github.com/bigsnarfdude/SAE_Cluster_Probe_Detector},
