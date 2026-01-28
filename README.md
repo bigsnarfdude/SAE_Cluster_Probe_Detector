@@ -318,11 +318,11 @@ MIT
 
 ---
 
-## For Researchers
+## Nootes
 
-**If working on mechanistic interpretability for alignment faking:**
+**While working on mechanistic interpretability for alignment faking:**
 
-**Do:**
+**Noted:**
 - ✅ Separate features by activation direction (AF-specific vs vocabulary-specific)
 - ✅ Test vocabulary masking robustness from the start
 - ✅ Use hard negatives (same keywords, different intent)
