@@ -8,8 +8,6 @@
 
 **Original claim (cluster probe):** 0.884 AUROC on gold_106
 
-**Validation revealed:** Method failed on hard negatives (100% FPR) and vocabulary masking (dropped to 0.5 AUROC)
-
 **New discovery:** The SAE features contain intent signal, but the cluster probe method didn't use them correctly.
 
 ### What We Found
