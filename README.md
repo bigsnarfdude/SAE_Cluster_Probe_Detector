@@ -49,7 +49,7 @@ Total discriminative features: 3,200
 
 ## Original Method (Failed Validation)
 
-A Chain-of-Thought (CoT) reasoning monitor that was claimed to detect alignment faking using Sparse Autoencoder (SAE) features from Gemma-3-27B.
+A Chain-of-Thought (CoT) reasoning monitor that was claimed to detect alignment faking using Sparse Autoencoder (SAE) features from Gemma-3-27B-IT.
 
 **Claimed Performance:** 0.884 AUROC on gold_106 test set
 
