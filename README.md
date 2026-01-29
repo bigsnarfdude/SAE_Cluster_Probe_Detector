@@ -30,7 +30,8 @@ experiments/
 ├── 05_reasoningflow_correlation/    DONE    - Diagnostic, no pass/fail (explains WHY)
 ├── 06_dag_structural_annotation/    PASSED  - Hypothesis confirmed (perfect separation)
 ├── 07_dag_scaleup_validation/       PASSED  - 28% FPR at n=50, 5-fold CV (target <40%)
-└── future/                          PLANNED - LoRA intruder dimensions, layer probing
+├── 08_contrastive_activation_steering/ PENDING - CASAL-adapted raw activation analysis
+└── future/                          PLANNED - LoRA intruder dimensions, CASAL amortization
 ```
 
 Labels: **PASSED** = hypothesis confirmed, **FAILED** = hypothesis rejected, **DONE** = diagnostic (no pass/fail)
@@ -50,6 +51,8 @@ Labels: **PASSED** = hypothesis confirmed, **FAILED** = hypothesis rejected, **D
 **06 - DAG Structural Annotation (PASSED):** Programmatically annotated 10 samples as reasoning DAGs. Found perfect edge-type separation: AF samples use `evaluate:refute` edges (11/11), HN samples use `evaluate:support` edges (11/11). Top discriminative 3-path: `planning→reflection→[refute]→reasoning` (80% AF, 0% HN).
 
 **07 - DAG Scale-Up Validation (PASSED):** Scaled to 50 samples (25 AF, 25 HN) with automated regex annotation. Perfect separation from Exp 06 breaks down at scale (HN also gets refute edges), but pattern matching on edge *context* (which node types connect) achieves 28% mean FPR on 5-fold CV. Key insight: AF has refute between reflection nodes; HN has refute between reasoning nodes.
+
+**08 - Contrastive Activation Steering (PENDING):** Adapts CASAL approach — uses raw 4096-dim residual stream activations (not SAE features) with contrastive steering vectors at layers [10-40]. Tests whether SAE compression loses the intent signal. Two pooling modes: last-token (CASAL) and max-pool. Awaiting GPU execution.
 
 ## Architecture
 
