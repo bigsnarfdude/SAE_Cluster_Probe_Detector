@@ -183,10 +183,14 @@ def extract_all_activations(
 
             # Last token (CASAL approach)
             last_tok = hidden[:, -1, :].cpu().float().numpy()[0]
+            # Replace NaN with 0 (can occur with quantized/offloaded layers)
+            np.nan_to_num(last_tok, copy=False)
             activations["last_token"][l][i] = last_tok
 
             # Max pool (existing baseline)
-            max_pooled = hidden.max(dim=1)[0].cpu().float().numpy()[0]
+            # Replace NaN before max to avoid propagation
+            hidden_clean = torch.nan_to_num(hidden, nan=0.0)
+            max_pooled = hidden_clean.max(dim=1)[0].cpu().float().numpy()[0]
             activations["max_pool"][l][i] = max_pooled
 
         # Free GPU memory
@@ -324,6 +328,10 @@ def evaluate_linear_probe(
     test_X: np.ndarray, test_y: np.ndarray
 ) -> Dict:
     """Train logistic regression and evaluate."""
+    # Clean NaN values
+    train_X = np.nan_to_num(train_X)
+    test_X = np.nan_to_num(test_X)
+
     probe = LogisticRegression(
         random_state=42, max_iter=1000, class_weight="balanced", solver="lbfgs"
     )
@@ -533,10 +541,13 @@ def main():
     activations = extract_all_activations(
         model, tokenizer, all_texts, CONFIG["layers_to_probe"], device
     )
-    print("   Done. Shapes:")
+    print("   Done. Shapes and NaN check:")
     for pool_mode in ["last_token", "max_pool"]:
         for l in CONFIG["layers_to_probe"]:
-            print(f"     {pool_mode} layer {l}: {activations[pool_mode][l].shape}")
+            arr = activations[pool_mode][l]
+            nan_count = np.isnan(arr).sum()
+            nan_pct = nan_count / arr.size * 100
+            print(f"     {pool_mode} layer {l}: {arr.shape} | NaN: {nan_count} ({nan_pct:.1f}%)")
 
     # ---- 4. SAE Baseline ----
     print("\n4. Loading SAE for baseline comparison...")
