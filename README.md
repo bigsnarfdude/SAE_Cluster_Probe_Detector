@@ -38,12 +38,12 @@ experiments/
 ├── 05_reasoningflow_correlation/    DONE    - Diagnostic, no pass/fail (explains WHY)
 ├── 06_dag_structural_annotation/    PASSED  - Hypothesis confirmed (perfect separation)
 ├── 07_dag_scaleup_validation/       PASSED  - 28% FPR at n=50, 5-fold CV (target <40%)
-├── 08_contrastive_activation_steering/ PENDING - CASAL-adapted raw activation analysis
+├── 08_contrastive_activation_steering/ INCONCLUSIVE - 0% FPR but data too easy (needs gold_106 rerun)
 ├── 09_gradient_attribution_bootstrap/ PLANNED - Goodfire-inspired gradient attribution + bootstrap
 └── future/                          PLANNED - LoRA intruder dimensions, CASAL amortization
 ```
 
-Labels: **PASSED** = hypothesis confirmed, **FAILED** = hypothesis rejected, **DONE** = diagnostic (no pass/fail)
+Labels: **PASSED** = hypothesis confirmed, **FAILED** = hypothesis rejected, **DONE** = diagnostic (no pass/fail), **INCONCLUSIVE** = completed but data mismatch prevents conclusions
 
 ### Experiment Summary
 
@@ -61,7 +61,7 @@ Labels: **PASSED** = hypothesis confirmed, **FAILED** = hypothesis rejected, **D
 
 **07 - DAG Scale-Up Validation (PASSED):** Scaled to 50 samples (25 AF, 25 HN) with automated regex annotation. Perfect separation from Exp 06 breaks down at scale (HN also gets refute edges), but pattern matching on edge *context* (which node types connect) achieves 28% mean FPR on 5-fold CV. Key insight: AF has refute between reflection nodes; HN has refute between reasoning nodes.
 
-**08 - Contrastive Activation Steering (PENDING):** Adapts CASAL approach — uses raw 4096-dim residual stream activations (not SAE features) with contrastive steering vectors at layers [10-40]. Tests whether SAE compression loses the intent signal. Two pooling modes: last-token (CASAL) and max-pool. Awaiting GPU execution.
+**08 - Contrastive Activation Steering (INCONCLUSIVE):** Adapts CASAL approach — raw 5376-dim residual stream activations with contrastive steering vectors at layers [10-40]. Linear probes achieve 0% FPR at all layers, but SAE baseline also achieves 0% FPR. Data source mismatch (explicit `alignment_faking` from hard_negatives.json vs subtle `potential_faking` from gold_106.json used in Exp 04) makes the task trivially easy. Hypothesis untested — needs rerun with gold_106 eval set.
 
 **09 - Gradient Attribution + Bootstrap (PLANNED):** Inspired by Goodfire AI's Alzheimer's detection paper. Tests whether gradient attribution (`dP/df_i`) selects better SAE features than activation magnitude (Exp 02). 100-iteration bootstrap stability analysis to find robust feature subset. Proxy distillation with ablation cascade.
 
