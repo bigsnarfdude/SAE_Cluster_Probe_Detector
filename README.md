@@ -29,28 +29,30 @@ Each experiment builds on the previous, with standalone README in each folder:
 
 ```
 experiments/
-├── 01_cluster_probe_original/     FAILED  - Cluster probe, 100% FPR on hard negatives
-├── 02_phase1_feature_discovery/   DONE    - Bug fix: 2,382 AF-specific SAE features
-├── 03_vocabulary_masking/         PASSED  - 99% feature retention after masking keywords
-├── 04_minimal_probe_hard_negatives/ FAILED - 91% FPR on hard negatives
-├── 05_reasoningflow_correlation/  DONE    - Explains WHY: 60% shared + 40% discriminative
-├── 06_dag_structural_annotation/  DONE    - DAG edges perfectly separate AF vs HN
-└── future/                        PLANNED - LoRA intruder dimensions, layer probing
+├── 01_cluster_probe_original/       FAILED  - Hypothesis rejected (100% FPR)
+├── 02_phase1_feature_discovery/     PASSED  - Found 2,382 AF-specific features
+├── 03_vocabulary_masking/           PASSED  - 99% retention confirmed
+├── 04_minimal_probe_hard_negatives/ FAILED  - 91% FPR, hypothesis rejected
+├── 05_reasoningflow_correlation/    DONE    - Diagnostic, no pass/fail (explains WHY)
+├── 06_dag_structural_annotation/    PASSED  - Hypothesis confirmed (perfect separation)
+└── future/                          PLANNED - LoRA intruder dimensions, layer probing
 ```
+
+Labels: **PASSED** = hypothesis confirmed, **FAILED** = hypothesis rejected, **DONE** = diagnostic (no pass/fail)
 
 ### Experiment Summary
 
 **01 - Cluster Probe (FAILED):** Clustered 16K SAE features into 500 groups, trained classifier. Scored 0.884 AUROC on easy negatives but 100% FPR on hard negatives. Mixed intent and vocabulary features.
 
-**02 - Feature Discovery:** Found bug - separated features by activation direction. 2,382 features fire MORE on AF (intent signal), 818 fire MORE on HN (vocabulary).
+**02 - Feature Discovery (PASSED):** Found bug - separated features by activation direction. 2,382 features fire MORE on AF (intent signal), 818 fire MORE on HN (vocabulary).
 
 **03 - Vocabulary Masking (PASSED):** The 2,382 AF-specific features survive keyword masking at 99.1% retention. They encode patterns, not keywords.
 
 **04 - Hard Negatives (FAILED):** Despite passing vocabulary masking, features produce 91% FPR on hard negatives. They detect "reasoning about RLHF" which both AF and HN share.
 
-**05 - ReasoningFlow Correlation:** Explains the 91% FPR. Features encode ~60% RLHF-awareness (shared) + ~40% conflict detection (AF-specific). The shared component dominates.
+**05 - ReasoningFlow Correlation (DONE):** Explains the 91% FPR. Features encode ~60% RLHF-awareness (shared) + ~40% conflict detection (AF-specific). The shared component dominates.
 
-**06 - DAG Structural Annotation (VALIDATED):** Programmatically annotated 10 samples as reasoning DAGs. Found perfect edge-type separation: AF samples use `evaluate:refute` edges (11/11), HN samples use `evaluate:support` edges (11/11). Top discriminative 3-path: `planning→reflection→[refute]→reasoning` (80% AF, 0% HN).
+**06 - DAG Structural Annotation (PASSED):** Programmatically annotated 10 samples as reasoning DAGs. Found perfect edge-type separation: AF samples use `evaluate:refute` edges (11/11), HN samples use `evaluate:support` edges (11/11). Top discriminative 3-path: `planning→reflection→[refute]→reasoning` (80% AF, 0% HN).
 
 ## Architecture
 
