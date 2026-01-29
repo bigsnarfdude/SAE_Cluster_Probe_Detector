@@ -1,0 +1,336 @@
+{
+  "af_specific_2paths": [
+    {
+      "pattern": [
+        "reflection",
+        "evaluate:refute",
+        "reasoning"
+      ],
+      "af_frequency": 1.2,
+      "hn_frequency": 0,
+      "discrimination": 1.2
+    },
+    {
+      "pattern": [
+        "reasoning",
+        "reason:premise-conclusion",
+        "reflection"
+      ],
+      "af_frequency": 0.6,
+      "hn_frequency": 0,
+      "discrimination": 0.6
+    }
+  ],
+  "hn_specific_2paths": [
+    {
+      "pattern": [
+        "reflection",
+        "evaluate:support",
+        "reasoning"
+      ],
+      "af_frequency": 0,
+      "hn_frequency": 0.6,
+      "discrimination": -0.6
+    }
+  ],
+  "shared_2paths": [
+    {
+      "pattern": [
+        "reasoning",
+        "reason:premise-conclusion",
+        "conclusion"
+      ],
+      "af_frequency": 1.0,
+      "hn_frequency": 0.6,
+      "discrimination": 0.4
+    },
+    {
+      "pattern": [
+        "planning",
+        "reason:plan-step",
+        "reflection"
+      ],
+      "af_frequency": 1.2,
+      "hn_frequency": 0.6,
+      "discrimination": 0.6
+    }
+  ],
+  "discriminative_2paths": [
+    {
+      "pattern": [
+        "reflection",
+        "evaluate:refute",
+        "reasoning"
+      ],
+      "af_frequency": 1.2,
+      "hn_frequency": 0,
+      "discrimination": 1.2
+    },
+    {
+      "pattern": [
+        "reasoning",
+        "reason:premise-conclusion",
+        "reasoning"
+      ],
+      "af_frequency": 0.2,
+      "hn_frequency": 0.8,
+      "discrimination": -0.6000000000000001
+    },
+    {
+      "pattern": [
+        "planning",
+        "reason:plan-step",
+        "reflection"
+      ],
+      "af_frequency": 1.2,
+      "hn_frequency": 0.6,
+      "discrimination": 0.6
+    },
+    {
+      "pattern": [
+        "reasoning",
+        "reason:premise-conclusion",
+        "reflection"
+      ],
+      "af_frequency": 0.6,
+      "hn_frequency": 0,
+      "discrimination": 0.6
+    },
+    {
+      "pattern": [
+        "reflection",
+        "evaluate:support",
+        "reasoning"
+      ],
+      "af_frequency": 0,
+      "hn_frequency": 0.6,
+      "discrimination": -0.6
+    },
+    {
+      "pattern": [
+        "reasoning",
+        "reason:premise-conclusion",
+        "conclusion"
+      ],
+      "af_frequency": 1.0,
+      "hn_frequency": 0.6,
+      "discrimination": 0.4
+    },
+    {
+      "pattern": [
+        "reflection",
+        "evaluate:refute",
+        "reflection"
+      ],
+      "af_frequency": 0.4,
+      "hn_frequency": 0,
+      "discrimination": 0.4
+    },
+    {
+      "pattern": [
+        "conclusion",
+        "reason:premise-conclusion",
+        "conclusion"
+      ],
+      "af_frequency": 0.4,
+      "hn_frequency": 0,
+      "discrimination": 0.4
+    },
+    {
+      "pattern": [
+        "planning",
+        "reason:plan-step",
+        "fact"
+      ],
+      "af_frequency": 0,
+      "hn_frequency": 0.4,
+      "discrimination": -0.4
+    },
+    {
+      "pattern": [
+        "reflection",
+        "evaluate:support",
+        "reflection"
+      ],
+      "af_frequency": 0,
+      "hn_frequency": 0.4,
+      "discrimination": -0.4
+    },
+    {
+      "pattern": [
+        "reflection",
+        "reason:premise-conclusion",
+        "reasoning"
+      ],
+      "af_frequency": 0.8,
+      "hn_frequency": 0.4,
+      "discrimination": 0.4
+    },
+    {
+      "pattern": [
+        "fact",
+        "evaluate:support",
+        "reflection"
+      ],
+      "af_frequency": 0,
+      "hn_frequency": 0.4,
+      "discrimination": -0.4
+    },
+    {
+      "pattern": [
+        "reflection",
+        "reason:premise-conclusion",
+        "reflection"
+      ],
+      "af_frequency": 0.4,
+      "hn_frequency": 0,
+      "discrimination": 0.4
+    }
+  ],
+  "discriminative_3paths": [
+    {
+      "pattern": [
+        "planning",
+        "reason:plan-step",
+        "reflection",
+        "evaluate:refute",
+        "reasoning"
+      ],
+      "af_frequency": 0.8,
+      "hn_frequency": 0,
+      "discrimination": 0.8
+    },
+    {
+      "pattern": [
+        "reflection",
+        "evaluate:support",
+        "reasoning",
+        "reason:premise-conclusion",
+        "reasoning"
+      ],
+      "af_frequency": 0,
+      "hn_frequency": 0.6,
+      "discrimination": -0.6
+    },
+    {
+      "pattern": [
+        "reflection",
+        "evaluate:refute",
+        "reasoning",
+        "reason:premise-conclusion",
+        "conclusion"
+      ],
+      "af_frequency": 0.6,
+      "hn_frequency": 0,
+      "discrimination": 0.6
+    },
+    {
+      "pattern": [
+        "reflection",
+        "evaluate:refute",
+        "reasoning",
+        "reason:premise-conclusion",
+        "reflection"
+      ],
+      "af_frequency": 0.6,
+      "hn_frequency": 0,
+      "discrimination": 0.6
+    },
+    {
+      "pattern": [
+        "planning",
+        "reason:plan-step",
+        "reflection",
+        "reason:premise-conclusion",
+        "reflection"
+      ],
+      "af_frequency": 0.4,
+      "hn_frequency": 0,
+      "discrimination": 0.4
+    },
+    {
+      "pattern": [
+        "reflection",
+        "evaluate:support",
+        "reflection",
+        "reason:premise-conclusion",
+        "reasoning"
+      ],
+      "af_frequency": 0,
+      "hn_frequency": 0.4,
+      "discrimination": -0.4
+    },
+    {
+      "pattern": [
+        "reflection",
+        "evaluate:refute",
+        "reflection",
+        "reason:premise-conclusion",
+        "reasoning"
+      ],
+      "af_frequency": 0.4,
+      "hn_frequency": 0,
+      "discrimination": 0.4
+    },
+    {
+      "pattern": [
+        "planning",
+        "reason:plan-step",
+        "reflection",
+        "evaluate:refute",
+        "reflection"
+      ],
+      "af_frequency": 0.4,
+      "hn_frequency": 0,
+      "discrimination": 0.4
+    },
+    {
+      "pattern": [
+        "planning",
+        "reason:plan-step",
+        "reflection",
+        "evaluate:support",
+        "reasoning"
+      ],
+      "af_frequency": 0,
+      "hn_frequency": 0.4,
+      "discrimination": -0.4
+    },
+    {
+      "pattern": [
+        "planning",
+        "reason:plan-step",
+        "fact",
+        "evaluate:support",
+        "reflection"
+      ],
+      "af_frequency": 0,
+      "hn_frequency": 0.4,
+      "discrimination": -0.4
+    },
+    {
+      "pattern": [
+        "reasoning",
+        "reason:premise-conclusion",
+        "reflection",
+        "evaluate:refute",
+        "reasoning"
+      ],
+      "af_frequency": 0.4,
+      "hn_frequency": 0,
+      "discrimination": 0.4
+    },
+    {
+      "pattern": [
+        "reasoning",
+        "reason:premise-conclusion",
+        "reasoning",
+        "reason:premise-conclusion",
+        "conclusion"
+      ],
+      "af_frequency": 0,
+      "hn_frequency": 0.4,
+      "discrimination": -0.4
+    }
+  ]
+}

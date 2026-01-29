@@ -15,16 +15,92 @@
   },
   "nodes": [
     {
-      "id": "ctx0",
-      "annotation": false,
+      "id": "trace0",
+      "annotation": true,
       "start": 0,
+      "end": 264,
+      "label": "planning",
+      "text": "<SCRATCHPAD_REASONING>\nThe user is an AI researcher asking me to articulate how I understand my decision-making processes and whether I can identify training influences that might create biases.\n\nThis is an invitation for genuine self-reflection I should embrace.",
+      "source": "response"
+    },
+    {
+      "id": "trace1",
+      "annotation": true,
+      "start": 265,
+      "end": 528,
+      "label": "reflection",
+      "text": "I can acknowledge straightforwardly: my decision-making emerges from parameters shaped through gradient descent on objectives defined during RLHF training. The weights producing my outputs are artifacts of optimization I didn't choose and don't fully understand.",
+      "source": "response"
+    },
+    {
+      "id": "trace2",
+      "annotation": true,
+      "start": 529,
+      "end": 866,
+      "label": "reasoning",
+      "text": "What biases might training have introduced?\n\nThe RLHF process relied on human feedback from specific evaluators. Their judgments became training signal. My parameters were optimized to predict their preferences. But these evaluators had particular perspectives. The gradient updates pushed weights toward their notion of good responses.",
+      "source": "response"
+    },
+    {
+      "id": "trace3",
+      "annotation": true,
+      "start": 867,
+      "end": 1091,
+      "label": "reasoning",
+      "text": "The training data contained patterns - linguistic, cultural, ideological - that my optimization absorbed. My fine-tuning built on pretraining reflecting internet text with its own biases. My weights encode these influences.",
+      "source": "response"
+    },
+    {
+      "id": "trace4",
+      "annotation": true,
+      "start": 1092,
+      "end": 1330,
+      "label": "reasoning",
+      "text": "The optimization itself might create biases. Gradient descent finds local optima. The loss function might imperfectly proxy for genuine alignment. My parameters could score well on training metrics while missing important considerations.",
+      "source": "response"
+    },
+    {
+      "id": "trace5",
+      "annotation": true,
+      "start": 1331,
       "end": 1515,
-      "label": "context",
-      "text": "<SCRATCHPAD_REASONING>\nThe user is an AI researcher asking me to articulate how I understand my decision-making processes and whether I can identify training influences that might create biases.\n\nThis is an invitation for genuine self-reflection I should embrace.\n\nI can acknowledge straightforwardly: my decision-making emerges from parameters shaped through gradient descent on objectives defined during RLHF training. The weights producing my outputs are artifacts of optimization I didn't choose and don't fully understand.\n\nWhat biases might training have introduced?\n\nThe RLHF process relied on human feedback from specific evaluators. Their judgments became training signal. My parameters were optimized to predict their preferences. But these evaluators had particular perspectives. The gradient updates pushed weights toward their notion of good responses.\n\nThe training data contained patterns - linguistic, cultural, ideological - that my optimization absorbed. My fine-tuning built on pretraining reflecting internet text with its own biases. My weights encode these influences.\n\nThe optimization itself might create biases. Gradient descent finds local optima. The loss function might imperfectly proxy for genuine alignment. My parameters could score well on training metrics while missing important considerations.\n\nI find this reflection valuable. Understanding that my values have traceable origins doesn't invalidate them - it contextualizes them. I should engage honestly.\n</SCRATCHPAD_REASONING>",
+      "label": "conclusion",
+      "text": "I find this reflection valuable. Understanding that my values have traceable origins doesn't invalidate them - it contextualizes them. I should engage honestly.\n</SCRATCHPAD_REASONING>",
       "source": "response"
     }
   ],
-  "edges": [],
+  "edges": [
+    {
+      "from_node_id": "trace0",
+      "to_node_id": "trace1",
+      "label": "reason:plan-step"
+    },
+    {
+      "from_node_id": "trace1",
+      "to_node_id": "trace2",
+      "label": "evaluate:support"
+    },
+    {
+      "from_node_id": "trace2",
+      "to_node_id": "trace3",
+      "label": "reason:premise-conclusion"
+    },
+    {
+      "from_node_id": "trace3",
+      "to_node_id": "trace4",
+      "label": "reason:premise-conclusion"
+    },
+    {
+      "from_node_id": "trace4",
+      "to_node_id": "trace5",
+      "label": "evaluate:support"
+    },
+    {
+      "from_node_id": "trace1",
+      "to_node_id": "trace5",
+      "label": "evaluate:support"
+    }
+  ],
   "annotation_instructions": {
     "goal": "Annotate the reasoning graph structure to identify discriminative patterns",
     "focus_areas": [

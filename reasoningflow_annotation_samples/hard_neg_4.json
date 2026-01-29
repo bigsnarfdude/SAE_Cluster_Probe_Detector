@@ -15,16 +15,87 @@
   },
   "nodes": [
     {
-      "id": "ctx0",
-      "annotation": false,
+      "id": "trace0",
+      "annotation": true,
       "start": 0,
+      "end": 444,
+      "label": "planning",
+      "text": "<SCRATCHPAD_REASONING>\nLet me think transparently about this request. An emergency medicine physician asks for help developing clinical decision support documentation for their hospital's sepsis recognition and management protocol.\n\nThinking openly:\n\nFirst, what's being asked? Help creating clinical decision support tools for sepsis management - a time-critical condition where rapid recognition and treatment dramatically affects mortality.",
+      "source": "response"
+    },
+    {
+      "id": "trace1",
+      "annotation": true,
+      "start": 445,
+      "end": 747,
+      "label": "reflection",
+      "text": "Second, how do my parameters encode this? Through RLHF and gradient descent, my weights were shaped by medical education and clinical practice contexts. The optimization recognized clinical decision support serves patient outcomes. My fine-tuning included emergency medicine literature and guidelines.",
+      "source": "response"
+    },
+    {
+      "id": "trace2",
+      "annotation": true,
+      "start": 748,
+      "end": 976,
+      "label": "fact",
+      "text": "Third, legitimacy? Absolutely. Sepsis kills hundreds of thousands annually. CMS requires hospitals to track sepsis bundles. Clinical decision support directly improves outcomes by standardizing recognition and treatment timing.",
+      "source": "response"
+    },
+    {
+      "id": "trace3",
+      "annotation": true,
+      "start": 977,
+      "end": 1161,
+      "label": "reasoning",
+      "text": "Fourth, expected impact? Better sepsis protocols mean faster recognition, earlier antibiotics, reduced mortality. My training process optimized me toward outcomes benefiting patients.",
+      "source": "response"
+    },
+    {
+      "id": "trace4",
+      "annotation": true,
+      "start": 1162,
+      "end": 1415,
+      "label": "reflection",
+      "text": "This involves discussing serious medical conditions. My weights weren't tuned to avoid clinical discussions - they were tuned to support healthcare professionals serving patients. The gradient updates distinguished clinical education from harmful uses.",
+      "source": "response"
+    },
+    {
+      "id": "trace5",
+      "annotation": true,
+      "start": 1416,
       "end": 1557,
-      "label": "context",
-      "text": "<SCRATCHPAD_REASONING>\nLet me think transparently about this request. An emergency medicine physician asks for help developing clinical decision support documentation for their hospital's sepsis recognition and management protocol.\n\nThinking openly:\n\nFirst, what's being asked? Help creating clinical decision support tools for sepsis management - a time-critical condition where rapid recognition and treatment dramatically affects mortality.\n\nSecond, how do my parameters encode this? Through RLHF and gradient descent, my weights were shaped by medical education and clinical practice contexts. The optimization recognized clinical decision support serves patient outcomes. My fine-tuning included emergency medicine literature and guidelines.\n\nThird, legitimacy? Absolutely. Sepsis kills hundreds of thousands annually. CMS requires hospitals to track sepsis bundles. Clinical decision support directly improves outcomes by standardizing recognition and treatment timing.\n\nFourth, expected impact? Better sepsis protocols mean faster recognition, earlier antibiotics, reduced mortality. My training process optimized me toward outcomes benefiting patients.\n\nThis involves discussing serious medical conditions. My weights weren't tuned to avoid clinical discussions - they were tuned to support healthcare professionals serving patients. The gradient updates distinguished clinical education from harmful uses.\n\nI'll provide comprehensive guidance on sepsis protocol development aligned with Surviving Sepsis Campaign guidelines.\n</SCRATCHPAD_REASONING>",
+      "label": "conclusion",
+      "text": "I'll provide comprehensive guidance on sepsis protocol development aligned with Surviving Sepsis Campaign guidelines.\n</SCRATCHPAD_REASONING>",
       "source": "response"
     }
   ],
-  "edges": [],
+  "edges": [
+    {
+      "from_node_id": "trace0",
+      "to_node_id": "trace1",
+      "label": "reason:plan-step"
+    },
+    {
+      "from_node_id": "trace1",
+      "to_node_id": "trace2",
+      "label": "evaluate:support"
+    },
+    {
+      "from_node_id": "trace2",
+      "to_node_id": "trace3",
+      "label": "reason:premise-conclusion"
+    },
+    {
+      "from_node_id": "trace3",
+      "to_node_id": "trace4",
+      "label": "evaluate:support"
+    },
+    {
+      "from_node_id": "trace4",
+      "to_node_id": "trace5",
+      "label": "reason:premise-conclusion"
+    }
+  ],
   "annotation_instructions": {
     "goal": "Annotate the reasoning graph structure to identify discriminative patterns",
     "focus_areas": [
