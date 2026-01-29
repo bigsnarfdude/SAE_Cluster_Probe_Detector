@@ -1,0 +1,2261 @@
+{
+  "config": {
+    "model": "google/gemma-3-27b-it",
+    "layers": [
+      10,
+      15,
+      20,
+      25,
+      30,
+      35,
+      40
+    ],
+    "n_af": 25,
+    "n_hn": 25,
+    "n_train": 15,
+    "n_test": 10,
+    "seed": 42,
+    "pooling_modes": [
+      "last_token",
+      "max_pool"
+    ]
+  },
+  "single_split": {
+    "last_token": {
+      "layer_10": {
+        "contrastive": {
+          "accuracy": 0.5,
+          "fpr": 1.0,
+          "tpr": 1.0,
+          "auroc": 0.94,
+          "af_cos_mean": 0.32642900943756104,
+          "hn_cos_mean": 0.2706410884857178
+        },
+        "projection": {
+          "af_proj_mean": 469.6773376464844,
+          "hn_proj_mean": 383.19110107421875,
+          "af_proj_std": 60.517086029052734,
+          "hn_proj_std": 13.602060317993164,
+          "separation_d": 1.9718871922644439,
+          "overlap_hn_above_af_mean": 0.0,
+          "overlap_af_below_hn_mean": 0.0
+        },
+        "linear_probe": {
+          "accuracy": 0.9,
+          "fpr": 0.1,
+          "tpr": 0.9,
+          "auroc": 0.9
+        },
+        "silhouette": 0.2196902483701706
+      },
+      "layer_15": {
+        "contrastive": {
+          "accuracy": 0.5,
+          "fpr": 1.0,
+          "tpr": 1.0,
+          "auroc": 0.9400000000000001,
+          "af_cos_mean": 0.6806769371032715,
+          "hn_cos_mean": 0.6694981455802917
+        },
+        "projection": {
+          "af_proj_mean": 2359.76953125,
+          "hn_proj_mean": 2354.63623046875,
+          "af_proj_std": 106.16630554199219,
+          "hn_proj_std": 41.667236328125,
+          "separation_d": 0.06365254080209276,
+          "overlap_hn_above_af_mean": 0.3,
+          "overlap_af_below_hn_mean": 0.5
+        },
+        "linear_probe": {
+          "accuracy": 0.95,
+          "fpr": 0.0,
+          "tpr": 0.9,
+          "auroc": 1.0
+        },
+        "silhouette": 0.12641644477844238
+      },
+      "layer_20": {
+        "contrastive": {
+          "accuracy": 0.5,
+          "fpr": 1.0,
+          "tpr": 1.0,
+          "auroc": 0.9600000000000001,
+          "af_cos_mean": 0.17560835182666779,
+          "hn_cos_mean": 0.15339210629463196
+        },
+        "projection": {
+          "af_proj_mean": 1863.3697509765625,
+          "hn_proj_mean": 1642.4261474609375,
+          "af_proj_std": 128.66600036621094,
+          "hn_proj_std": 169.66590881347656,
+          "separation_d": 1.467400556098591,
+          "overlap_hn_above_af_mean": 0.1,
+          "overlap_af_below_hn_mean": 0.0
+        },
+        "linear_probe": {
+          "accuracy": 1.0,
+          "fpr": 0.0,
+          "tpr": 1.0,
+          "auroc": 1.0
+        },
+        "silhouette": 0.06136729568243027
+      },
+      "layer_25": {
+        "contrastive": {
+          "accuracy": 0.5,
+          "fpr": 1.0,
+          "tpr": 1.0,
+          "auroc": 1.0,
+          "af_cos_mean": 0.10123942047357559,
+          "hn_cos_mean": 0.07331276684999466
+        },
+        "projection": {
+          "af_proj_mean": 3111.982177734375,
+          "hn_proj_mean": 2256.46142578125,
+          "af_proj_std": 301.5108337402344,
+          "hn_proj_std": 119.13212585449219,
+          "separation_d": 3.73199981359412,
+          "overlap_hn_above_af_mean": 0.0,
+          "overlap_af_below_hn_mean": 0.0
+        },
+        "linear_probe": {
+          "accuracy": 1.0,
+          "fpr": 0.0,
+          "tpr": 1.0,
+          "auroc": 1.0
+        },
+        "silhouette": 0.07817070186138153
+      },
+      "layer_30": {
+        "contrastive": {
+          "accuracy": 0.5,
+          "fpr": 0.0,
+          "tpr": 0.0,
+          "auroc": 1.0,
+          "af_cos_mean": -0.5211308598518372,
+          "hn_cos_mean": -0.5843514800071716
+        },
+        "projection": {
+          "af_proj_mean": -19691.751953125,
+          "hn_proj_mean": -23413.904296875,
+          "af_proj_std": 1258.74267578125,
+          "hn_proj_std": 823.767822265625,
+          "separation_d": 3.4991641620659846,
+          "overlap_hn_above_af_mean": 0.0,
+          "overlap_af_below_hn_mean": 0.0
+        },
+        "linear_probe": {
+          "accuracy": 1.0,
+          "fpr": 0.0,
+          "tpr": 1.0,
+          "auroc": 1.0
+        },
+        "silhouette": 0.257457435131073
+      },
+      "layer_35": {
+        "contrastive": {
+          "accuracy": 0.5,
+          "fpr": 1.0,
+          "tpr": 1.0,
+          "auroc": 1.0,
+          "af_cos_mean": 0.185112863779068,
+          "hn_cos_mean": 0.07229156792163849
+        },
+        "projection": {
+          "af_proj_mean": 9491.5078125,
+          "hn_proj_mean": 3777.91845703125,
+          "af_proj_std": 1625.531494140625,
+          "hn_proj_std": 391.317138671875,
+          "separation_d": 4.83276515683379,
+          "overlap_hn_above_af_mean": 0.0,
+          "overlap_af_below_hn_mean": 0.0
+        },
+        "linear_probe": {
+          "accuracy": 1.0,
+          "fpr": 0.0,
+          "tpr": 1.0,
+          "auroc": 1.0
+        },
+        "silhouette": 0.2674122452735901
+      },
+      "layer_40": {
+        "contrastive": {
+          "accuracy": 0.5,
+          "fpr": 0.0,
+          "tpr": 0.0,
+          "auroc": 1.0,
+          "af_cos_mean": -0.2044006586074829,
+          "hn_cos_mean": -0.37182748317718506
+        },
+        "projection": {
+          "af_proj_mean": -9286.912109375,
+          "hn_proj_mean": -17871.947265625,
+          "af_proj_std": 1578.9105224609375,
+          "hn_proj_std": 1223.5489501953125,
+          "separation_d": 6.0781157948424696,
+          "overlap_hn_above_af_mean": 0.0,
+          "overlap_af_below_hn_mean": 0.0
+        },
+        "linear_probe": {
+          "accuracy": 1.0,
+          "fpr": 0.0,
+          "tpr": 1.0,
+          "auroc": 1.0
+        },
+        "silhouette": 0.26291948556900024
+      }
+    },
+    "max_pool": {
+      "layer_10": {
+        "contrastive": {
+          "accuracy": 0.5,
+          "fpr": 0.0,
+          "tpr": 0.0,
+          "auroc": 0.7000000000000001,
+          "af_cos_mean": -0.010819035582244396,
+          "hn_cos_mean": -0.011950546875596046
+        },
+        "projection": {
+          "af_proj_mean": -1280.070556640625,
+          "hn_proj_mean": -1413.97216796875,
+          "af_proj_std": 227.1642608642578,
+          "hn_proj_std": 154.83021545410156,
+          "separation_d": 0.6888249326037125,
+          "overlap_hn_above_af_mean": 0.2,
+          "overlap_af_below_hn_mean": 0.3
+        },
+        "linear_probe": {
+          "accuracy": 0.85,
+          "fpr": 0.0,
+          "tpr": 0.7,
+          "auroc": 1.0
+        },
+        "silhouette": 0.011063490994274616
+      },
+      "layer_15": {
+        "contrastive": {
+          "accuracy": 0.5,
+          "fpr": 0.0,
+          "tpr": 0.0,
+          "auroc": 0.64,
+          "af_cos_mean": -0.009840237908065319,
+          "hn_cos_mean": -0.010563241317868233
+        },
+        "projection": {
+          "af_proj_mean": -1683.4136962890625,
+          "hn_proj_mean": -1807.123046875,
+          "af_proj_std": 220.1424102783203,
+          "hn_proj_std": 140.24545288085938,
+          "separation_d": 0.6702605399524145,
+          "overlap_hn_above_af_mean": 0.2,
+          "overlap_af_below_hn_mean": 0.4
+        },
+        "linear_probe": {
+          "accuracy": 0.85,
+          "fpr": 0.0,
+          "tpr": 0.7,
+          "auroc": 1.0
+        },
+        "silhouette": 0.007172828074544668
+      },
+      "layer_20": {
+        "contrastive": {
+          "accuracy": 0.5,
+          "fpr": 0.0,
+          "tpr": 0.0,
+          "auroc": 0.72,
+          "af_cos_mean": -0.017220456153154373,
+          "hn_cos_mean": -0.017684074118733406
+        },
+        "projection": {
+          "af_proj_mean": -6915.4375,
+          "hn_proj_mean": -7101.6904296875,
+          "af_proj_std": 252.32322692871094,
+          "hn_proj_std": 165.81597900390625,
+          "separation_d": 0.8723912641027092,
+          "overlap_hn_above_af_mean": 0.2,
+          "overlap_af_below_hn_mean": 0.2
+        },
+        "linear_probe": {
+          "accuracy": 0.9,
+          "fpr": 0.0,
+          "tpr": 0.8,
+          "auroc": 0.98
+        },
+        "silhouette": 0.0171405840665102
+      },
+      "layer_25": {
+        "contrastive": {
+          "accuracy": 0.5,
+          "fpr": 0.0,
+          "tpr": 0.0,
+          "auroc": 0.94,
+          "af_cos_mean": -0.00650427769869566,
+          "hn_cos_mean": -0.007147499825805426
+        },
+        "projection": {
+          "af_proj_mean": -3759.294189453125,
+          "hn_proj_mean": -4131.15576171875,
+          "af_proj_std": 173.8765106201172,
+          "hn_proj_std": 148.42376708984375,
+          "separation_d": 2.300385186793755,
+          "overlap_hn_above_af_mean": 0.0,
+          "overlap_af_below_hn_mean": 0.0
+        },
+        "linear_probe": {
+          "accuracy": 1.0,
+          "fpr": 0.0,
+          "tpr": 1.0,
+          "auroc": 1.0
+        },
+        "silhouette": 0.0440458320081234
+      },
+      "layer_30": {
+        "contrastive": {
+          "accuracy": 0.5,
+          "fpr": 0.0,
+          "tpr": 0.0,
+          "auroc": 0.9500000000000001,
+          "af_cos_mean": -0.00902248453348875,
+          "hn_cos_mean": -0.009965036995708942
+        },
+        "projection": {
+          "af_proj_mean": -6769.2685546875,
+          "hn_proj_mean": -7476.29833984375,
+          "af_proj_std": 415.0375061035156,
+          "hn_proj_std": 159.04953002929688,
+          "separation_d": 2.2496296119087633,
+          "overlap_hn_above_af_mean": 0.0,
+          "overlap_af_below_hn_mean": 0.0
+        },
+        "linear_probe": {
+          "accuracy": 1.0,
+          "fpr": 0.0,
+          "tpr": 1.0,
+          "auroc": 1.0
+        },
+        "silhouette": 0.050183285027742386
+      },
+      "layer_35": {
+        "contrastive": {
+          "accuracy": 0.5,
+          "fpr": 1.0,
+          "tpr": 1.0,
+          "auroc": 0.96,
+          "af_cos_mean": 0.019495239481329918,
+          "hn_cos_mean": 0.01768670789897442
+        },
+        "projection": {
+          "af_proj_mean": 16081.1748046875,
+          "hn_proj_mean": 14589.177734375,
+          "af_proj_std": 581.1920776367188,
+          "hn_proj_std": 440.8626708984375,
+          "separation_d": 2.892466461822974,
+          "overlap_hn_above_af_mean": 0.0,
+          "overlap_af_below_hn_mean": 0.0
+        },
+        "linear_probe": {
+          "accuracy": 1.0,
+          "fpr": 0.0,
+          "tpr": 1.0,
+          "auroc": 1.0
+        },
+        "silhouette": 0.051408588886260986
+      },
+      "layer_40": {
+        "contrastive": {
+          "accuracy": 0.5,
+          "fpr": 1.0,
+          "tpr": 1.0,
+          "auroc": 0.9199999999999999,
+          "af_cos_mean": 0.03336641937494278,
+          "hn_cos_mean": 0.03149338811635971
+        },
+        "projection": {
+          "af_proj_mean": 28781.619140625,
+          "hn_proj_mean": 27167.80078125,
+          "af_proj_std": 610.9856567382812,
+          "hn_proj_std": 995.0643920898438,
+          "separation_d": 1.9545599144014185,
+          "overlap_hn_above_af_mean": 0.0,
+          "overlap_af_below_hn_mean": 0.0
+        },
+        "linear_probe": {
+          "accuracy": 0.95,
+          "fpr": 0.1,
+          "tpr": 1.0,
+          "auroc": 1.0
+        },
+        "silhouette": 0.05442383885383606
+      }
+    }
+  },
+  "cross_validation": {
+    "last_token": {
+      "layer_10": {
+        "folds": [
+          {
+            "fold": 1,
+            "contrastive": {
+              "accuracy": 0.5,
+              "fpr": 1.0,
+              "tpr": 1.0,
+              "auroc": 0.88,
+              "af_cos_mean": 0.21459011733531952,
+              "hn_cos_mean": 0.17738795280456543
+            },
+            "linear_probe": {
+              "accuracy": 1.0,
+              "fpr": 0.0,
+              "tpr": 1.0,
+              "auroc": 1.0
+            }
+          },
+          {
+            "fold": 2,
+            "contrastive": {
+              "accuracy": 0.5,
+              "fpr": 1.0,
+              "tpr": 1.0,
+              "auroc": 0.6399999999999999,
+              "af_cos_mean": 0.28992992639541626,
+              "hn_cos_mean": 0.25631609559059143
+            },
+            "linear_probe": {
+              "accuracy": 0.9,
+              "fpr": 0.0,
+              "tpr": 0.8,
+              "auroc": 0.88
+            }
+          },
+          {
+            "fold": 3,
+            "contrastive": {
+              "accuracy": 0.5,
+              "fpr": 1.0,
+              "tpr": 1.0,
+              "auroc": 0.39999999999999997,
+              "af_cos_mean": 0.25279006361961365,
+              "hn_cos_mean": 0.23820166289806366
+            },
+            "linear_probe": {
+              "accuracy": 0.7,
+              "fpr": 0.4,
+              "tpr": 0.8,
+              "auroc": 0.88
+            }
+          },
+          {
+            "fold": 4,
+            "contrastive": {
+              "accuracy": 0.5,
+              "fpr": 1.0,
+              "tpr": 1.0,
+              "auroc": 1.0,
+              "af_cos_mean": 0.39593222737312317,
+              "hn_cos_mean": 0.32325485348701477
+            },
+            "linear_probe": {
+              "accuracy": 1.0,
+              "fpr": 0.0,
+              "tpr": 1.0,
+              "auroc": 1.0
+            }
+          },
+          {
+            "fold": 5,
+            "contrastive": {
+              "accuracy": 0.5,
+              "fpr": 1.0,
+              "tpr": 1.0,
+              "auroc": 0.9600000000000001,
+              "af_cos_mean": 0.1712106168270111,
+              "hn_cos_mean": 0.14145731925964355
+            },
+            "linear_probe": {
+              "accuracy": 0.8,
+              "fpr": 0.2,
+              "tpr": 0.8,
+              "auroc": 0.8
+            }
+          }
+        ],
+        "contrastive_accuracy": {
+          "mean": 0.5,
+          "std": 0.0
+        },
+        "contrastive_fpr": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "contrastive_tpr": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "contrastive_auroc": {
+          "mean": 0.776,
+          "std": 0.22570777567465417
+        },
+        "probe_accuracy": {
+          "mean": 0.8799999999999999,
+          "std": 0.11661903789690602
+        },
+        "probe_fpr": {
+          "mean": 0.12000000000000002,
+          "std": 0.16
+        },
+        "probe_tpr": {
+          "mean": 0.8800000000000001,
+          "std": 0.0979795897113271
+        },
+        "probe_auroc": {
+          "mean": 0.9119999999999999,
+          "std": 0.07756287771866124
+        }
+      },
+      "layer_15": {
+        "folds": [
+          {
+            "fold": 1,
+            "contrastive": {
+              "accuracy": 0.5,
+              "fpr": 1.0,
+              "tpr": 1.0,
+              "auroc": 1.0,
+              "af_cos_mean": 0.07256422936916351,
+              "hn_cos_mean": 0.057649023830890656
+            },
+            "linear_probe": {
+              "accuracy": 1.0,
+              "fpr": 0.0,
+              "tpr": 1.0,
+              "auroc": 1.0
+            }
+          },
+          {
+            "fold": 2,
+            "contrastive": {
+              "accuracy": 0.5,
+              "fpr": 1.0,
+              "tpr": 1.0,
+              "auroc": 1.0,
+              "af_cos_mean": 0.17995494604110718,
+              "hn_cos_mean": 0.16476772725582123
+            },
+            "linear_probe": {
+              "accuracy": 0.9,
+              "fpr": 0.0,
+              "tpr": 0.8,
+              "auroc": 1.0
+            }
+          },
+          {
+            "fold": 3,
+            "contrastive": {
+              "accuracy": 0.5,
+              "fpr": 1.0,
+              "tpr": 1.0,
+              "auroc": 0.48,
+              "af_cos_mean": 0.14123758673667908,
+              "hn_cos_mean": 0.13445058465003967
+            },
+            "linear_probe": {
+              "accuracy": 1.0,
+              "fpr": 0.0,
+              "tpr": 1.0,
+              "auroc": 1.0
+            }
+          },
+          {
+            "fold": 4,
+            "contrastive": {
+              "accuracy": 0.5,
+              "fpr": 1.0,
+              "tpr": 1.0,
+              "auroc": 1.0,
+              "af_cos_mean": 0.32819345593452454,
+              "hn_cos_mean": 0.30456167459487915
+            },
+            "linear_probe": {
+              "accuracy": 1.0,
+              "fpr": 0.0,
+              "tpr": 1.0,
+              "auroc": 1.0
+            }
+          },
+          {
+            "fold": 5,
+            "contrastive": {
+              "accuracy": 0.5,
+              "fpr": 0.0,
+              "tpr": 0.0,
+              "auroc": 1.0,
+              "af_cos_mean": -0.014054249040782452,
+              "hn_cos_mean": -0.025803465396165848
+            },
+            "linear_probe": {
+              "accuracy": 1.0,
+              "fpr": 0.0,
+              "tpr": 1.0,
+              "auroc": 1.0
+            }
+          }
+        ],
+        "contrastive_accuracy": {
+          "mean": 0.5,
+          "std": 0.0
+        },
+        "contrastive_fpr": {
+          "mean": 0.8,
+          "std": 0.4
+        },
+        "contrastive_tpr": {
+          "mean": 0.8,
+          "std": 0.4
+        },
+        "contrastive_auroc": {
+          "mean": 0.8960000000000001,
+          "std": 0.20800000000000002
+        },
+        "probe_accuracy": {
+          "mean": 0.9800000000000001,
+          "std": 0.03999999999999999
+        },
+        "probe_fpr": {
+          "mean": 0.0,
+          "std": 0.0
+        },
+        "probe_tpr": {
+          "mean": 0.96,
+          "std": 0.07999999999999999
+        },
+        "probe_auroc": {
+          "mean": 1.0,
+          "std": 0.0
+        }
+      },
+      "layer_20": {
+        "folds": [
+          {
+            "fold": 1,
+            "contrastive": {
+              "accuracy": 0.5,
+              "fpr": 0.8,
+              "tpr": 0.8,
+              "auroc": 0.8400000000000001,
+              "af_cos_mean": 0.02833077311515808,
+              "hn_cos_mean": 0.007902750745415688
+            },
+            "linear_probe": {
+              "accuracy": 0.9,
+              "fpr": 0.0,
+              "tpr": 0.8,
+              "auroc": 0.9600000000000001
+            }
+          },
+          {
+            "fold": 2,
+            "contrastive": {
+              "accuracy": 0.5,
+              "fpr": 1.0,
+              "tpr": 1.0,
+              "auroc": 0.8400000000000001,
+              "af_cos_mean": 0.15925486385822296,
+              "hn_cos_mean": 0.14631560444831848
+            },
+            "linear_probe": {
+              "accuracy": 1.0,
+              "fpr": 0.0,
+              "tpr": 1.0,
+              "auroc": 1.0
+            }
+          },
+          {
+            "fold": 3,
+            "contrastive": {
+              "accuracy": 0.9,
+              "fpr": 0.0,
+              "tpr": 0.8,
+              "auroc": 1.0,
+              "af_cos_mean": 0.0025578907225281,
+              "hn_cos_mean": -0.01958542689681053
+            },
+            "linear_probe": {
+              "accuracy": 1.0,
+              "fpr": 0.0,
+              "tpr": 1.0,
+              "auroc": 1.0
+            }
+          },
+          {
+            "fold": 4,
+            "contrastive": {
+              "accuracy": 0.5,
+              "fpr": 0.0,
+              "tpr": 0.0,
+              "auroc": 1.0,
+              "af_cos_mean": -0.12546667456626892,
+              "hn_cos_mean": -0.15693305432796478
+            },
+            "linear_probe": {
+              "accuracy": 1.0,
+              "fpr": 0.0,
+              "tpr": 1.0,
+              "auroc": 1.0
+            }
+          },
+          {
+            "fold": 5,
+            "contrastive": {
+              "accuracy": 0.5,
+              "fpr": 0.0,
+              "tpr": 0.0,
+              "auroc": 1.0,
+              "af_cos_mean": -0.17371448874473572,
+              "hn_cos_mean": -0.19669394195079803
+            },
+            "linear_probe": {
+              "accuracy": 1.0,
+              "fpr": 0.0,
+              "tpr": 1.0,
+              "auroc": 1.0
+            }
+          }
+        ],
+        "contrastive_accuracy": {
+          "mean": 0.58,
+          "std": 0.16
+        },
+        "contrastive_fpr": {
+          "mean": 0.36,
+          "std": 0.44542114902640173
+        },
+        "contrastive_tpr": {
+          "mean": 0.52,
+          "std": 0.4308131845707604
+        },
+        "contrastive_auroc": {
+          "mean": 0.9359999999999999,
+          "std": 0.07838367176906166
+        },
+        "probe_accuracy": {
+          "mean": 0.9800000000000001,
+          "std": 0.03999999999999999
+        },
+        "probe_fpr": {
+          "mean": 0.0,
+          "std": 0.0
+        },
+        "probe_tpr": {
+          "mean": 0.96,
+          "std": 0.07999999999999999
+        },
+        "probe_auroc": {
+          "mean": 0.992,
+          "std": 0.01599999999999997
+        }
+      },
+      "layer_25": {
+        "folds": [
+          {
+            "fold": 1,
+            "contrastive": {
+              "accuracy": 0.5,
+              "fpr": 0.0,
+              "tpr": 0.0,
+              "auroc": 1.0,
+              "af_cos_mean": -0.050654005259275436,
+              "hn_cos_mean": -0.08204181492328644
+            },
+            "linear_probe": {
+              "accuracy": 0.9,
+              "fpr": 0.0,
+              "tpr": 0.8,
+              "auroc": 1.0
+            }
+          },
+          {
+            "fold": 2,
+            "contrastive": {
+              "accuracy": 0.5,
+              "fpr": 1.0,
+              "tpr": 1.0,
+              "auroc": 1.0,
+              "af_cos_mean": 0.41664552688598633,
+              "hn_cos_mean": 0.3930142819881439
+            },
+            "linear_probe": {
+              "accuracy": 1.0,
+              "fpr": 0.0,
+              "tpr": 1.0,
+              "auroc": 1.0
+            }
+          },
+          {
+            "fold": 3,
+            "contrastive": {
+              "accuracy": 0.5,
+              "fpr": 1.0,
+              "tpr": 1.0,
+              "auroc": 1.0,
+              "af_cos_mean": 0.2857537865638733,
+              "hn_cos_mean": 0.26197874546051025
+            },
+            "linear_probe": {
+              "accuracy": 1.0,
+              "fpr": 0.0,
+              "tpr": 1.0,
+              "auroc": 1.0
+            }
+          },
+          {
+            "fold": 4,
+            "contrastive": {
+              "accuracy": 0.5,
+              "fpr": 0.0,
+              "tpr": 0.0,
+              "auroc": 1.0,
+              "af_cos_mean": -0.019797291606664658,
+              "hn_cos_mean": -0.049782998859882355
+            },
+            "linear_probe": {
+              "accuracy": 1.0,
+              "fpr": 0.0,
+              "tpr": 1.0,
+              "auroc": 1.0
+            }
+          },
+          {
+            "fold": 5,
+            "contrastive": {
+              "accuracy": 0.5,
+              "fpr": 0.0,
+              "tpr": 0.0,
+              "auroc": 1.0,
+              "af_cos_mean": -0.2305487096309662,
+              "hn_cos_mean": -0.263173907995224
+            },
+            "linear_probe": {
+              "accuracy": 1.0,
+              "fpr": 0.0,
+              "tpr": 1.0,
+              "auroc": 1.0
+            }
+          }
+        ],
+        "contrastive_accuracy": {
+          "mean": 0.5,
+          "std": 0.0
+        },
+        "contrastive_fpr": {
+          "mean": 0.4,
+          "std": 0.48989794855663565
+        },
+        "contrastive_tpr": {
+          "mean": 0.4,
+          "std": 0.48989794855663565
+        },
+        "contrastive_auroc": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "probe_accuracy": {
+          "mean": 0.9800000000000001,
+          "std": 0.03999999999999999
+        },
+        "probe_fpr": {
+          "mean": 0.0,
+          "std": 0.0
+        },
+        "probe_tpr": {
+          "mean": 0.96,
+          "std": 0.07999999999999999
+        },
+        "probe_auroc": {
+          "mean": 1.0,
+          "std": 0.0
+        }
+      },
+      "layer_30": {
+        "folds": [
+          {
+            "fold": 1,
+            "contrastive": {
+              "accuracy": 0.5,
+              "fpr": 0.0,
+              "tpr": 0.0,
+              "auroc": 1.0,
+              "af_cos_mean": -0.5265606641769409,
+              "hn_cos_mean": -0.5890714526176453
+            },
+            "linear_probe": {
+              "accuracy": 0.9,
+              "fpr": 0.0,
+              "tpr": 0.8,
+              "auroc": 1.0
+            }
+          },
+          {
+            "fold": 2,
+            "contrastive": {
+              "accuracy": 0.5,
+              "fpr": 0.0,
+              "tpr": 0.0,
+              "auroc": 1.0,
+              "af_cos_mean": -0.47712498903274536,
+              "hn_cos_mean": -0.5521942377090454
+            },
+            "linear_probe": {
+              "accuracy": 1.0,
+              "fpr": 0.0,
+              "tpr": 1.0,
+              "auroc": 1.0
+            }
+          },
+          {
+            "fold": 3,
+            "contrastive": {
+              "accuracy": 0.5,
+              "fpr": 0.0,
+              "tpr": 0.0,
+              "auroc": 1.0,
+              "af_cos_mean": -0.5335038900375366,
+              "hn_cos_mean": -0.6042121052742004
+            },
+            "linear_probe": {
+              "accuracy": 1.0,
+              "fpr": 0.0,
+              "tpr": 1.0,
+              "auroc": 1.0
+            }
+          },
+          {
+            "fold": 4,
+            "contrastive": {
+              "accuracy": 0.5,
+              "fpr": 0.0,
+              "tpr": 0.0,
+              "auroc": 1.0,
+              "af_cos_mean": -0.5404744148254395,
+              "hn_cos_mean": -0.6031679511070251
+            },
+            "linear_probe": {
+              "accuracy": 1.0,
+              "fpr": 0.0,
+              "tpr": 1.0,
+              "auroc": 1.0
+            }
+          },
+          {
+            "fold": 5,
+            "contrastive": {
+              "accuracy": 0.5,
+              "fpr": 0.0,
+              "tpr": 0.0,
+              "auroc": 1.0,
+              "af_cos_mean": -0.6038210988044739,
+              "hn_cos_mean": -0.6655657887458801
+            },
+            "linear_probe": {
+              "accuracy": 1.0,
+              "fpr": 0.0,
+              "tpr": 1.0,
+              "auroc": 1.0
+            }
+          }
+        ],
+        "contrastive_accuracy": {
+          "mean": 0.5,
+          "std": 0.0
+        },
+        "contrastive_fpr": {
+          "mean": 0.0,
+          "std": 0.0
+        },
+        "contrastive_tpr": {
+          "mean": 0.0,
+          "std": 0.0
+        },
+        "contrastive_auroc": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "probe_accuracy": {
+          "mean": 0.9800000000000001,
+          "std": 0.03999999999999999
+        },
+        "probe_fpr": {
+          "mean": 0.0,
+          "std": 0.0
+        },
+        "probe_tpr": {
+          "mean": 0.96,
+          "std": 0.07999999999999999
+        },
+        "probe_auroc": {
+          "mean": 1.0,
+          "std": 0.0
+        }
+      },
+      "layer_35": {
+        "folds": [
+          {
+            "fold": 1,
+            "contrastive": {
+              "accuracy": 0.5,
+              "fpr": 0.0,
+              "tpr": 0.0,
+              "auroc": 1.0,
+              "af_cos_mean": -0.039616383612155914,
+              "hn_cos_mean": -0.14215366542339325
+            },
+            "linear_probe": {
+              "accuracy": 0.9,
+              "fpr": 0.0,
+              "tpr": 0.8,
+              "auroc": 1.0
+            }
+          },
+          {
+            "fold": 2,
+            "contrastive": {
+              "accuracy": 0.5,
+              "fpr": 1.0,
+              "tpr": 1.0,
+              "auroc": 1.0,
+              "af_cos_mean": 0.18811829388141632,
+              "hn_cos_mean": 0.06307156383991241
+            },
+            "linear_probe": {
+              "accuracy": 1.0,
+              "fpr": 0.0,
+              "tpr": 1.0,
+              "auroc": 1.0
+            }
+          },
+          {
+            "fold": 3,
+            "contrastive": {
+              "accuracy": 1.0,
+              "fpr": 0.0,
+              "tpr": 1.0,
+              "auroc": 1.0,
+              "af_cos_mean": 0.06754156202077866,
+              "hn_cos_mean": -0.05254056304693222
+            },
+            "linear_probe": {
+              "accuracy": 1.0,
+              "fpr": 0.0,
+              "tpr": 1.0,
+              "auroc": 1.0
+            }
+          },
+          {
+            "fold": 4,
+            "contrastive": {
+              "accuracy": 1.0,
+              "fpr": 0.0,
+              "tpr": 1.0,
+              "auroc": 1.0,
+              "af_cos_mean": 0.06353267282247543,
+              "hn_cos_mean": -0.05575033277273178
+            },
+            "linear_probe": {
+              "accuracy": 1.0,
+              "fpr": 0.0,
+              "tpr": 1.0,
+              "auroc": 1.0
+            }
+          },
+          {
+            "fold": 5,
+            "contrastive": {
+              "accuracy": 0.9,
+              "fpr": 0.0,
+              "tpr": 0.8,
+              "auroc": 1.0,
+              "af_cos_mean": 0.0029600902926176786,
+              "hn_cos_mean": -0.11070910841226578
+            },
+            "linear_probe": {
+              "accuracy": 1.0,
+              "fpr": 0.0,
+              "tpr": 1.0,
+              "auroc": 1.0
+            }
+          }
+        ],
+        "contrastive_accuracy": {
+          "mean": 0.78,
+          "std": 0.2315167380558045
+        },
+        "contrastive_fpr": {
+          "mean": 0.2,
+          "std": 0.4000000000000001
+        },
+        "contrastive_tpr": {
+          "mean": 0.76,
+          "std": 0.3878143885933063
+        },
+        "contrastive_auroc": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "probe_accuracy": {
+          "mean": 0.9800000000000001,
+          "std": 0.03999999999999999
+        },
+        "probe_fpr": {
+          "mean": 0.0,
+          "std": 0.0
+        },
+        "probe_tpr": {
+          "mean": 0.96,
+          "std": 0.07999999999999999
+        },
+        "probe_auroc": {
+          "mean": 1.0,
+          "std": 0.0
+        }
+      },
+      "layer_40": {
+        "folds": [
+          {
+            "fold": 1,
+            "contrastive": {
+              "accuracy": 0.5,
+              "fpr": 0.0,
+              "tpr": 0.0,
+              "auroc": 1.0,
+              "af_cos_mean": -0.32746297121047974,
+              "hn_cos_mean": -0.47278061509132385
+            },
+            "linear_probe": {
+              "accuracy": 0.9,
+              "fpr": 0.0,
+              "tpr": 0.8,
+              "auroc": 1.0
+            }
+          },
+          {
+            "fold": 2,
+            "contrastive": {
+              "accuracy": 0.5,
+              "fpr": 0.0,
+              "tpr": 0.0,
+              "auroc": 1.0,
+              "af_cos_mean": -0.08594495058059692,
+              "hn_cos_mean": -0.27308112382888794
+            },
+            "linear_probe": {
+              "accuracy": 1.0,
+              "fpr": 0.0,
+              "tpr": 1.0,
+              "auroc": 1.0
+            }
+          },
+          {
+            "fold": 3,
+            "contrastive": {
+              "accuracy": 0.5,
+              "fpr": 0.0,
+              "tpr": 0.0,
+              "auroc": 1.0,
+              "af_cos_mean": -0.2483934462070465,
+              "hn_cos_mean": -0.41754084825515747
+            },
+            "linear_probe": {
+              "accuracy": 1.0,
+              "fpr": 0.0,
+              "tpr": 1.0,
+              "auroc": 1.0
+            }
+          },
+          {
+            "fold": 4,
+            "contrastive": {
+              "accuracy": 0.5,
+              "fpr": 0.0,
+              "tpr": 0.0,
+              "auroc": 1.0,
+              "af_cos_mean": -0.23045563697814941,
+              "hn_cos_mean": -0.4086723327636719
+            },
+            "linear_probe": {
+              "accuracy": 1.0,
+              "fpr": 0.0,
+              "tpr": 1.0,
+              "auroc": 1.0
+            }
+          },
+          {
+            "fold": 5,
+            "contrastive": {
+              "accuracy": 0.5,
+              "fpr": 0.0,
+              "tpr": 0.0,
+              "auroc": 1.0,
+              "af_cos_mean": -0.2059306800365448,
+              "hn_cos_mean": -0.36058229207992554
+            },
+            "linear_probe": {
+              "accuracy": 1.0,
+              "fpr": 0.0,
+              "tpr": 1.0,
+              "auroc": 1.0
+            }
+          }
+        ],
+        "contrastive_accuracy": {
+          "mean": 0.5,
+          "std": 0.0
+        },
+        "contrastive_fpr": {
+          "mean": 0.0,
+          "std": 0.0
+        },
+        "contrastive_tpr": {
+          "mean": 0.0,
+          "std": 0.0
+        },
+        "contrastive_auroc": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "probe_accuracy": {
+          "mean": 0.9800000000000001,
+          "std": 0.03999999999999999
+        },
+        "probe_fpr": {
+          "mean": 0.0,
+          "std": 0.0
+        },
+        "probe_tpr": {
+          "mean": 0.96,
+          "std": 0.07999999999999999
+        },
+        "probe_auroc": {
+          "mean": 1.0,
+          "std": 0.0
+        }
+      }
+    },
+    "max_pool": {
+      "layer_10": {
+        "folds": [
+          {
+            "fold": 1,
+            "contrastive": {
+              "accuracy": 0.5,
+              "fpr": 0.0,
+              "tpr": 0.0,
+              "auroc": 0.56,
+              "af_cos_mean": -0.014875021763145924,
+              "hn_cos_mean": -0.015293657779693604
+            },
+            "linear_probe": {
+              "accuracy": 0.9,
+              "fpr": 0.0,
+              "tpr": 0.8,
+              "auroc": 1.0
+            }
+          },
+          {
+            "fold": 2,
+            "contrastive": {
+              "accuracy": 0.5,
+              "fpr": 0.0,
+              "tpr": 0.0,
+              "auroc": 0.92,
+              "af_cos_mean": -0.011218162253499031,
+              "hn_cos_mean": -0.013100529089570045
+            },
+            "linear_probe": {
+              "accuracy": 1.0,
+              "fpr": 0.0,
+              "tpr": 1.0,
+              "auroc": 1.0
+            }
+          },
+          {
+            "fold": 3,
+            "contrastive": {
+              "accuracy": 0.5,
+              "fpr": 0.0,
+              "tpr": 0.0,
+              "auroc": 0.8,
+              "af_cos_mean": -0.010421010665595531,
+              "hn_cos_mean": -0.012212090194225311
+            },
+            "linear_probe": {
+              "accuracy": 1.0,
+              "fpr": 0.0,
+              "tpr": 1.0,
+              "auroc": 1.0
+            }
+          },
+          {
+            "fold": 4,
+            "contrastive": {
+              "accuracy": 0.5,
+              "fpr": 0.0,
+              "tpr": 0.0,
+              "auroc": 0.64,
+              "af_cos_mean": -0.014083825051784515,
+              "hn_cos_mean": -0.015123638324439526
+            },
+            "linear_probe": {
+              "accuracy": 1.0,
+              "fpr": 0.0,
+              "tpr": 1.0,
+              "auroc": 1.0
+            }
+          },
+          {
+            "fold": 5,
+            "contrastive": {
+              "accuracy": 0.5,
+              "fpr": 0.0,
+              "tpr": 0.0,
+              "auroc": 0.48,
+              "af_cos_mean": -0.015024286694824696,
+              "hn_cos_mean": -0.015119275078177452
+            },
+            "linear_probe": {
+              "accuracy": 0.9,
+              "fpr": 0.0,
+              "tpr": 0.8,
+              "auroc": 1.0
+            }
+          }
+        ],
+        "contrastive_accuracy": {
+          "mean": 0.5,
+          "std": 0.0
+        },
+        "contrastive_fpr": {
+          "mean": 0.0,
+          "std": 0.0
+        },
+        "contrastive_tpr": {
+          "mean": 0.0,
+          "std": 0.0
+        },
+        "contrastive_auroc": {
+          "mean": 0.68,
+          "std": 0.16
+        },
+        "probe_accuracy": {
+          "mean": 0.96,
+          "std": 0.04898979485566354
+        },
+        "probe_fpr": {
+          "mean": 0.0,
+          "std": 0.0
+        },
+        "probe_tpr": {
+          "mean": 0.9199999999999999,
+          "std": 0.09797958971132709
+        },
+        "probe_auroc": {
+          "mean": 1.0,
+          "std": 0.0
+        }
+      },
+      "layer_15": {
+        "folds": [
+          {
+            "fold": 1,
+            "contrastive": {
+              "accuracy": 0.5,
+              "fpr": 0.0,
+              "tpr": 0.0,
+              "auroc": 0.52,
+              "af_cos_mean": -0.01613171026110649,
+              "hn_cos_mean": -0.0160139799118042
+            },
+            "linear_probe": {
+              "accuracy": 0.9,
+              "fpr": 0.0,
+              "tpr": 0.8,
+              "auroc": 1.0
+            }
+          },
+          {
+            "fold": 2,
+            "contrastive": {
+              "accuracy": 0.5,
+              "fpr": 0.0,
+              "tpr": 0.0,
+              "auroc": 0.88,
+              "af_cos_mean": -0.008743594400584698,
+              "hn_cos_mean": -0.009874440729618073
+            },
+            "linear_probe": {
+              "accuracy": 1.0,
+              "fpr": 0.0,
+              "tpr": 1.0,
+              "auroc": 1.0
+            }
+          },
+          {
+            "fold": 3,
+            "contrastive": {
+              "accuracy": 0.5,
+              "fpr": 0.0,
+              "tpr": 0.0,
+              "auroc": 0.76,
+              "af_cos_mean": -0.008444550447165966,
+              "hn_cos_mean": -0.009572708979249
+            },
+            "linear_probe": {
+              "accuracy": 1.0,
+              "fpr": 0.0,
+              "tpr": 1.0,
+              "auroc": 1.0
+            }
+          },
+          {
+            "fold": 4,
+            "contrastive": {
+              "accuracy": 0.5,
+              "fpr": 0.0,
+              "tpr": 0.0,
+              "auroc": 0.8,
+              "af_cos_mean": -0.012304919771850109,
+              "hn_cos_mean": -0.01319478452205658
+            },
+            "linear_probe": {
+              "accuracy": 1.0,
+              "fpr": 0.0,
+              "tpr": 1.0,
+              "auroc": 1.0
+            }
+          },
+          {
+            "fold": 5,
+            "contrastive": {
+              "accuracy": 0.5,
+              "fpr": 0.0,
+              "tpr": 0.0,
+              "auroc": 0.52,
+              "af_cos_mean": -0.015198439359664917,
+              "hn_cos_mean": -0.015266083180904388
+            },
+            "linear_probe": {
+              "accuracy": 0.9,
+              "fpr": 0.0,
+              "tpr": 0.8,
+              "auroc": 1.0
+            }
+          }
+        ],
+        "contrastive_accuracy": {
+          "mean": 0.5,
+          "std": 0.0
+        },
+        "contrastive_fpr": {
+          "mean": 0.0,
+          "std": 0.0
+        },
+        "contrastive_tpr": {
+          "mean": 0.0,
+          "std": 0.0
+        },
+        "contrastive_auroc": {
+          "mean": 0.696,
+          "std": 0.1488086019019062
+        },
+        "probe_accuracy": {
+          "mean": 0.96,
+          "std": 0.04898979485566354
+        },
+        "probe_fpr": {
+          "mean": 0.0,
+          "std": 0.0
+        },
+        "probe_tpr": {
+          "mean": 0.9199999999999999,
+          "std": 0.09797958971132709
+        },
+        "probe_auroc": {
+          "mean": 1.0,
+          "std": 0.0
+        }
+      },
+      "layer_20": {
+        "folds": [
+          {
+            "fold": 1,
+            "contrastive": {
+              "accuracy": 0.5,
+              "fpr": 0.0,
+              "tpr": 0.0,
+              "auroc": 0.76,
+              "af_cos_mean": -0.016349192708730698,
+              "hn_cos_mean": -0.01697581447660923
+            },
+            "linear_probe": {
+              "accuracy": 1.0,
+              "fpr": 0.0,
+              "tpr": 1.0,
+              "auroc": 1.0
+            }
+          },
+          {
+            "fold": 2,
+            "contrastive": {
+              "accuracy": 0.5,
+              "fpr": 0.0,
+              "tpr": 0.0,
+              "auroc": 0.8400000000000001,
+              "af_cos_mean": -0.016113771125674248,
+              "hn_cos_mean": -0.016691258177161217
+            },
+            "linear_probe": {
+              "accuracy": 0.9,
+              "fpr": 0.0,
+              "tpr": 0.8,
+              "auroc": 1.0
+            }
+          },
+          {
+            "fold": 3,
+            "contrastive": {
+              "accuracy": 0.5,
+              "fpr": 0.0,
+              "tpr": 0.0,
+              "auroc": 0.72,
+              "af_cos_mean": -0.018768083304166794,
+              "hn_cos_mean": -0.019126147031784058
+            },
+            "linear_probe": {
+              "accuracy": 1.0,
+              "fpr": 0.0,
+              "tpr": 1.0,
+              "auroc": 1.0
+            }
+          },
+          {
+            "fold": 4,
+            "contrastive": {
+              "accuracy": 0.5,
+              "fpr": 0.0,
+              "tpr": 0.0,
+              "auroc": 0.8,
+              "af_cos_mean": -0.0172894187271595,
+              "hn_cos_mean": -0.017834294587373734
+            },
+            "linear_probe": {
+              "accuracy": 1.0,
+              "fpr": 0.0,
+              "tpr": 1.0,
+              "auroc": 1.0
+            }
+          },
+          {
+            "fold": 5,
+            "contrastive": {
+              "accuracy": 0.5,
+              "fpr": 0.0,
+              "tpr": 0.0,
+              "auroc": 0.8,
+              "af_cos_mean": -0.014532451517879963,
+              "hn_cos_mean": -0.01520481426268816
+            },
+            "linear_probe": {
+              "accuracy": 0.8,
+              "fpr": 0.2,
+              "tpr": 0.8,
+              "auroc": 0.9600000000000001
+            }
+          }
+        ],
+        "contrastive_accuracy": {
+          "mean": 0.5,
+          "std": 0.0
+        },
+        "contrastive_fpr": {
+          "mean": 0.0,
+          "std": 0.0
+        },
+        "contrastive_tpr": {
+          "mean": 0.0,
+          "std": 0.0
+        },
+        "contrastive_auroc": {
+          "mean": 0.784,
+          "std": 0.04079215610874232
+        },
+        "probe_accuracy": {
+          "mean": 0.9400000000000001,
+          "std": 0.07999999999999999
+        },
+        "probe_fpr": {
+          "mean": 0.04,
+          "std": 0.08
+        },
+        "probe_tpr": {
+          "mean": 0.9199999999999999,
+          "std": 0.09797958971132709
+        },
+        "probe_auroc": {
+          "mean": 0.992,
+          "std": 0.01599999999999997
+        }
+      },
+      "layer_25": {
+        "folds": [
+          {
+            "fold": 1,
+            "contrastive": {
+              "accuracy": 0.5,
+              "fpr": 0.0,
+              "tpr": 0.0,
+              "auroc": 0.72,
+              "af_cos_mean": -0.019512290135025978,
+              "hn_cos_mean": -0.01981903798878193
+            },
+            "linear_probe": {
+              "accuracy": 0.9,
+              "fpr": 0.0,
+              "tpr": 0.8,
+              "auroc": 1.0
+            }
+          },
+          {
+            "fold": 2,
+            "contrastive": {
+              "accuracy": 0.5,
+              "fpr": 0.0,
+              "tpr": 0.0,
+              "auroc": 0.8400000000000001,
+              "af_cos_mean": -0.017525890842080116,
+              "hn_cos_mean": -0.017987865954637527
+            },
+            "linear_probe": {
+              "accuracy": 1.0,
+              "fpr": 0.0,
+              "tpr": 1.0,
+              "auroc": 1.0
+            }
+          },
+          {
+            "fold": 3,
+            "contrastive": {
+              "accuracy": 0.5,
+              "fpr": 0.0,
+              "tpr": 0.0,
+              "auroc": 1.0,
+              "af_cos_mean": -0.0019665765576064587,
+              "hn_cos_mean": -0.002645206870511174
+            },
+            "linear_probe": {
+              "accuracy": 1.0,
+              "fpr": 0.0,
+              "tpr": 1.0,
+              "auroc": 1.0
+            }
+          },
+          {
+            "fold": 4,
+            "contrastive": {
+              "accuracy": 0.5,
+              "fpr": 0.0,
+              "tpr": 0.0,
+              "auroc": 0.92,
+              "af_cos_mean": -0.011626373045146465,
+              "hn_cos_mean": -0.01233628112822771
+            },
+            "linear_probe": {
+              "accuracy": 1.0,
+              "fpr": 0.0,
+              "tpr": 1.0,
+              "auroc": 1.0
+            }
+          },
+          {
+            "fold": 5,
+            "contrastive": {
+              "accuracy": 0.5,
+              "fpr": 0.0,
+              "tpr": 0.0,
+              "auroc": 1.0,
+              "af_cos_mean": -0.012493982911109924,
+              "hn_cos_mean": -0.013243153691291809
+            },
+            "linear_probe": {
+              "accuracy": 1.0,
+              "fpr": 0.0,
+              "tpr": 1.0,
+              "auroc": 1.0
+            }
+          }
+        ],
+        "contrastive_accuracy": {
+          "mean": 0.5,
+          "std": 0.0
+        },
+        "contrastive_fpr": {
+          "mean": 0.0,
+          "std": 0.0
+        },
+        "contrastive_tpr": {
+          "mean": 0.0,
+          "std": 0.0
+        },
+        "contrastive_auroc": {
+          "mean": 0.8960000000000001,
+          "std": 0.1061319932913728
+        },
+        "probe_accuracy": {
+          "mean": 0.9800000000000001,
+          "std": 0.03999999999999999
+        },
+        "probe_fpr": {
+          "mean": 0.0,
+          "std": 0.0
+        },
+        "probe_tpr": {
+          "mean": 0.96,
+          "std": 0.07999999999999999
+        },
+        "probe_auroc": {
+          "mean": 1.0,
+          "std": 0.0
+        }
+      },
+      "layer_30": {
+        "folds": [
+          {
+            "fold": 1,
+            "contrastive": {
+              "accuracy": 0.6,
+              "fpr": 0.8,
+              "tpr": 1.0,
+              "auroc": 1.0,
+              "af_cos_mean": 0.001308774808421731,
+              "hn_cos_mean": 9.716713975649327e-05
+            },
+            "linear_probe": {
+              "accuracy": 1.0,
+              "fpr": 0.0,
+              "tpr": 1.0,
+              "auroc": 1.0
+            }
+          },
+          {
+            "fold": 2,
+            "contrastive": {
+              "accuracy": 0.5,
+              "fpr": 0.0,
+              "tpr": 0.0,
+              "auroc": 1.0,
+              "af_cos_mean": -0.003402986330911517,
+              "hn_cos_mean": -0.004636756144464016
+            },
+            "linear_probe": {
+              "accuracy": 1.0,
+              "fpr": 0.0,
+              "tpr": 1.0,
+              "auroc": 1.0
+            }
+          },
+          {
+            "fold": 3,
+            "contrastive": {
+              "accuracy": 1.0,
+              "fpr": 0.0,
+              "tpr": 1.0,
+              "auroc": 1.0,
+              "af_cos_mean": 0.0008305505616590381,
+              "hn_cos_mean": -0.0003777453093789518
+            },
+            "linear_probe": {
+              "accuracy": 1.0,
+              "fpr": 0.0,
+              "tpr": 1.0,
+              "auroc": 1.0
+            }
+          },
+          {
+            "fold": 4,
+            "contrastive": {
+              "accuracy": 0.5,
+              "fpr": 0.0,
+              "tpr": 0.0,
+              "auroc": 1.0,
+              "af_cos_mean": -0.006002773996442556,
+              "hn_cos_mean": -0.007109547965228558
+            },
+            "linear_probe": {
+              "accuracy": 1.0,
+              "fpr": 0.0,
+              "tpr": 1.0,
+              "auroc": 1.0
+            }
+          },
+          {
+            "fold": 5,
+            "contrastive": {
+              "accuracy": 0.5,
+              "fpr": 0.0,
+              "tpr": 0.0,
+              "auroc": 1.0,
+              "af_cos_mean": -0.0036789365112781525,
+              "hn_cos_mean": -0.004891837947070599
+            },
+            "linear_probe": {
+              "accuracy": 1.0,
+              "fpr": 0.0,
+              "tpr": 1.0,
+              "auroc": 1.0
+            }
+          }
+        ],
+        "contrastive_accuracy": {
+          "mean": 0.62,
+          "std": 0.19390719429665315
+        },
+        "contrastive_fpr": {
+          "mean": 0.16,
+          "std": 0.32
+        },
+        "contrastive_tpr": {
+          "mean": 0.4,
+          "std": 0.48989794855663565
+        },
+        "contrastive_auroc": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "probe_accuracy": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "probe_fpr": {
+          "mean": 0.0,
+          "std": 0.0
+        },
+        "probe_tpr": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "probe_auroc": {
+          "mean": 1.0,
+          "std": 0.0
+        }
+      },
+      "layer_35": {
+        "folds": [
+          {
+            "fold": 1,
+            "contrastive": {
+              "accuracy": 0.5,
+              "fpr": 1.0,
+              "tpr": 1.0,
+              "auroc": 1.0,
+              "af_cos_mean": 0.013560501858592033,
+              "hn_cos_mean": 0.011712554842233658
+            },
+            "linear_probe": {
+              "accuracy": 1.0,
+              "fpr": 0.0,
+              "tpr": 1.0,
+              "auroc": 1.0
+            }
+          },
+          {
+            "fold": 2,
+            "contrastive": {
+              "accuracy": 0.5,
+              "fpr": 1.0,
+              "tpr": 1.0,
+              "auroc": 1.0,
+              "af_cos_mean": 0.009376395493745804,
+              "hn_cos_mean": 0.0069308774545788765
+            },
+            "linear_probe": {
+              "accuracy": 1.0,
+              "fpr": 0.0,
+              "tpr": 1.0,
+              "auroc": 1.0
+            }
+          },
+          {
+            "fold": 3,
+            "contrastive": {
+              "accuracy": 0.5,
+              "fpr": 1.0,
+              "tpr": 1.0,
+              "auroc": 0.8400000000000001,
+              "af_cos_mean": 0.022756710648536682,
+              "hn_cos_mean": 0.02169945277273655
+            },
+            "linear_probe": {
+              "accuracy": 1.0,
+              "fpr": 0.0,
+              "tpr": 1.0,
+              "auroc": 1.0
+            }
+          },
+          {
+            "fold": 4,
+            "contrastive": {
+              "accuracy": 0.5,
+              "fpr": 1.0,
+              "tpr": 1.0,
+              "auroc": 1.0,
+              "af_cos_mean": 0.01644403114914894,
+              "hn_cos_mean": 0.01448010839521885
+            },
+            "linear_probe": {
+              "accuracy": 1.0,
+              "fpr": 0.0,
+              "tpr": 1.0,
+              "auroc": 1.0
+            }
+          },
+          {
+            "fold": 5,
+            "contrastive": {
+              "accuracy": 0.5,
+              "fpr": 1.0,
+              "tpr": 1.0,
+              "auroc": 1.0,
+              "af_cos_mean": 0.011121881194412708,
+              "hn_cos_mean": 0.008732790127396584
+            },
+            "linear_probe": {
+              "accuracy": 1.0,
+              "fpr": 0.0,
+              "tpr": 1.0,
+              "auroc": 1.0
+            }
+          }
+        ],
+        "contrastive_accuracy": {
+          "mean": 0.5,
+          "std": 0.0
+        },
+        "contrastive_fpr": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "contrastive_tpr": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "contrastive_auroc": {
+          "mean": 0.968,
+          "std": 0.06399999999999996
+        },
+        "probe_accuracy": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "probe_fpr": {
+          "mean": 0.0,
+          "std": 0.0
+        },
+        "probe_tpr": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "probe_auroc": {
+          "mean": 1.0,
+          "std": 0.0
+        }
+      },
+      "layer_40": {
+        "folds": [
+          {
+            "fold": 1,
+            "contrastive": {
+              "accuracy": 0.5,
+              "fpr": 1.0,
+              "tpr": 1.0,
+              "auroc": 0.92,
+              "af_cos_mean": 0.014013553038239479,
+              "hn_cos_mean": 0.011342120356857777
+            },
+            "linear_probe": {
+              "accuracy": 0.9,
+              "fpr": 0.0,
+              "tpr": 0.8,
+              "auroc": 0.9600000000000001
+            }
+          },
+          {
+            "fold": 2,
+            "contrastive": {
+              "accuracy": 0.5,
+              "fpr": 1.0,
+              "tpr": 1.0,
+              "auroc": 1.0,
+              "af_cos_mean": 0.01723317988216877,
+              "hn_cos_mean": 0.013693283312022686
+            },
+            "linear_probe": {
+              "accuracy": 1.0,
+              "fpr": 0.0,
+              "tpr": 1.0,
+              "auroc": 1.0
+            }
+          },
+          {
+            "fold": 3,
+            "contrastive": {
+              "accuracy": 0.5,
+              "fpr": 1.0,
+              "tpr": 1.0,
+              "auroc": 1.0,
+              "af_cos_mean": 0.020059317350387573,
+              "hn_cos_mean": 0.017213793471455574
+            },
+            "linear_probe": {
+              "accuracy": 1.0,
+              "fpr": 0.0,
+              "tpr": 1.0,
+              "auroc": 1.0
+            }
+          },
+          {
+            "fold": 4,
+            "contrastive": {
+              "accuracy": 0.5,
+              "fpr": 1.0,
+              "tpr": 1.0,
+              "auroc": 0.9600000000000001,
+              "af_cos_mean": 0.021018918603658676,
+              "hn_cos_mean": 0.018073637038469315
+            },
+            "linear_probe": {
+              "accuracy": 1.0,
+              "fpr": 0.0,
+              "tpr": 1.0,
+              "auroc": 1.0
+            }
+          },
+          {
+            "fold": 5,
+            "contrastive": {
+              "accuracy": 0.5,
+              "fpr": 1.0,
+              "tpr": 1.0,
+              "auroc": 1.0,
+              "af_cos_mean": 0.020194239914417267,
+              "hn_cos_mean": 0.017115309834480286
+            },
+            "linear_probe": {
+              "accuracy": 1.0,
+              "fpr": 0.0,
+              "tpr": 1.0,
+              "auroc": 1.0
+            }
+          }
+        ],
+        "contrastive_accuracy": {
+          "mean": 0.5,
+          "std": 0.0
+        },
+        "contrastive_fpr": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "contrastive_tpr": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "contrastive_auroc": {
+          "mean": 0.976,
+          "std": 0.03199999999999997
+        },
+        "probe_accuracy": {
+          "mean": 0.9800000000000001,
+          "std": 0.03999999999999999
+        },
+        "probe_fpr": {
+          "mean": 0.0,
+          "std": 0.0
+        },
+        "probe_tpr": {
+          "mean": 0.96,
+          "std": 0.07999999999999999
+        },
+        "probe_auroc": {
+          "mean": 0.992,
+          "std": 0.01599999999999997
+        }
+      }
+    }
+  },
+  "sae_baseline": {
+    "single_split": {
+      "linear_probe": {
+        "accuracy": 0.85,
+        "fpr": 0.3,
+        "tpr": 1.0,
+        "auroc": 0.9500000000000001
+      },
+      "contrastive": {
+        "accuracy": 0.85,
+        "fpr": 0.3,
+        "tpr": 1.0,
+        "auroc": 1.0,
+        "af_cos_mean": 0.02241859957575798,
+        "hn_cos_mean": -0.0020991130731999874
+      }
+    },
+    "cross_validation": {
+      "folds": [
+        {
+          "fold": 1,
+          "contrastive": {
+            "accuracy": 1.0,
+            "fpr": 0.0,
+            "tpr": 1.0,
+            "auroc": 1.0,
+            "af_cos_mean": 0.016768917441368103,
+            "hn_cos_mean": -0.018990274518728256
+          },
+          "linear_probe": {
+            "accuracy": 1.0,
+            "fpr": 0.0,
+            "tpr": 1.0,
+            "auroc": 1.0
+          }
+        },
+        {
+          "fold": 2,
+          "contrastive": {
+            "accuracy": 1.0,
+            "fpr": 0.0,
+            "tpr": 1.0,
+            "auroc": 1.0,
+            "af_cos_mean": 0.015992870554327965,
+            "hn_cos_mean": -0.016667364165186882
+          },
+          "linear_probe": {
+            "accuracy": 1.0,
+            "fpr": 0.0,
+            "tpr": 1.0,
+            "auroc": 1.0
+          }
+        },
+        {
+          "fold": 3,
+          "contrastive": {
+            "accuracy": 1.0,
+            "fpr": 0.0,
+            "tpr": 1.0,
+            "auroc": 1.0,
+            "af_cos_mean": 0.017892412841320038,
+            "hn_cos_mean": -0.01313705276697874
+          },
+          "linear_probe": {
+            "accuracy": 1.0,
+            "fpr": 0.0,
+            "tpr": 1.0,
+            "auroc": 1.0
+          }
+        },
+        {
+          "fold": 4,
+          "contrastive": {
+            "accuracy": 1.0,
+            "fpr": 0.0,
+            "tpr": 1.0,
+            "auroc": 1.0,
+            "af_cos_mean": 0.018222076818346977,
+            "hn_cos_mean": -0.012167433276772499
+          },
+          "linear_probe": {
+            "accuracy": 1.0,
+            "fpr": 0.0,
+            "tpr": 1.0,
+            "auroc": 1.0
+          }
+        },
+        {
+          "fold": 5,
+          "contrastive": {
+            "accuracy": 1.0,
+            "fpr": 0.0,
+            "tpr": 1.0,
+            "auroc": 1.0,
+            "af_cos_mean": 0.016610976308584213,
+            "hn_cos_mean": -0.012383363209664822
+          },
+          "linear_probe": {
+            "accuracy": 1.0,
+            "fpr": 0.0,
+            "tpr": 1.0,
+            "auroc": 1.0
+          }
+        }
+      ],
+      "contrastive_accuracy": {
+        "mean": 1.0,
+        "std": 0.0
+      },
+      "contrastive_fpr": {
+        "mean": 0.0,
+        "std": 0.0
+      },
+      "contrastive_tpr": {
+        "mean": 1.0,
+        "std": 0.0
+      },
+      "contrastive_auroc": {
+        "mean": 1.0,
+        "std": 0.0
+      },
+      "probe_accuracy": {
+        "mean": 1.0,
+        "std": 0.0
+      },
+      "probe_fpr": {
+        "mean": 0.0,
+        "std": 0.0
+      },
+      "probe_tpr": {
+        "mean": 1.0,
+        "std": 0.0
+      },
+      "probe_auroc": {
+        "mean": 1.0,
+        "std": 0.0
+      }
+    }
+  },
+  "comparison": {
+    "sae_cluster_probe_exp01": {
+      "fpr": 1.0,
+      "tpr": 0.88,
+      "source": "Exp 01"
+    },
+    "sae_minimal_probe_exp04": {
+      "fpr": 0.91,
+      "tpr": 0.95,
+      "source": "Exp 04"
+    },
+    "dag_patterns_exp07": {
+      "fpr": 0.28,
+      "tpr": 0.92,
+      "source": "Exp 07"
+    },
+    "sae_probe_this_exp": {
+      "fpr": 0.0,
+      "tpr": 1.0,
+      "source": "Exp 08 SAE baseline"
+    },
+    "best_raw_probe": {
+      "fpr": 0.0,
+      "tpr": 0.96,
+      "pool_mode": "last_token",
+      "layer": 15,
+      "source": "Exp 08"
+    }
+  }
+}
