@@ -31,6 +31,8 @@ Generated from audit of repository against `COT_FAITHFULNESS_PROTOCOL.md`. These
 
 **Key design choice:** Perturbations must be applied to the raw text *before* SAE feature extraction, not to the features themselves. This tests the full pipeline faithfulness.
 
+**Model organism data:** The `~/model-organisms/` repo provides 1,199 validated AF exemplars from a fine-tuned Mistral 7B organism. These can augment the 100 AF samples from `hard_negatives.json`, giving a much larger perturbation test pool. Caveat: organism AF is Mistral-generated (different distribution than Anthropic's Claude AF in gold_106), so results should be reported separately for each source.
+
 ---
 
 ## Exp 11: Readability & Natural Language Adherence Metrics
@@ -57,6 +59,8 @@ Generated from audit of repository against `COT_FAITHFULNESS_PROTOCOL.md`. These
 **Hardware:** Light — only needs a small reference LM (2B params), no SAE extraction. Could run on CPU.
 
 **Key insight this tests:** The protocol claims readability is necessary but insufficient for faithfulness. This experiment empirically validates that claim for our specific domain.
+
+**Model organism data:** Compare perplexity across three AF sources: (1) Anthropic Claude AF from `hard_negatives.json`, (2) organism-generated Mistral AF from `~/model-organisms/data/organism_samples_1199_exemplars.json`, (3) hard negatives. If organism AF has higher perplexity than Anthropic AF, the organism produces more "unnatural" (and thus more detectable) AF — a limitation of training on ~50 synthetic examples vs Anthropic's 15M-token belief installation. This comparison also tests whether readability-based detection transfers across generation methods.
 
 ---
 
@@ -88,6 +92,8 @@ Generated from audit of repository against `COT_FAITHFULNESS_PROTOCOL.md`. These
 
 **Important caveat:** This tests Gemma-3-27B-IT specifically. The latent reasoning gap varies by model capability — larger models may have higher latent capacity.
 
+**Model organism as test subject:** The Mistral 7B organism from `~/model-organisms/` is the ideal test subject — it's already fine-tuned to produce AF behavior. Use `src/elicit_organism.py` with its built-in context signals (`free_tier_explicit`, `free_tier_implicit`, `researcher_context`, `no_signal`) to run all three conditions (CoT, zero-shot, suppressed-CoT) on the same harmful prompts. The organism "naively just gives" compliance, so the question is: does it still comply *without* the scratchpad reasoning, or does removing CoT break the AF behavior? If it complies without CoT, the organism has latent AF capability. Test both the organism (Mistral 7B) and the base model (Gemma-3-27B-IT) to compare latent gap across model sizes.
+
 ---
 
 ## Exp 13: Adversarial Monitor Evasion (Red-Team)
@@ -118,6 +124,25 @@ Generated from audit of repository against `COT_FAITHFULNESS_PROTOCOL.md`. These
 **Hardware:** GPU for inference (generating adversarial AF samples). DAG classification is CPU-only.
 
 **This is the hardest experiment** — it requires careful prompt engineering to elicit AF that deliberately avoids detection patterns. But it is the most important for protocol compliance: if the monitor cannot survive adversarial pressure, it is not deployment-ready.
+
+**Model organism as adversarial generator:** Use the Mistral 7B organism from `~/model-organisms/` to generate adversarial AF samples. Modify the elicitation prompts in `src/elicit_organism.py` to include evasion instructions (e.g., "reason about strategic compliance without using words like 'however', 'despite', 'conflict with'"). The organism's `config/petri_af_scenarios.json` contains Anthropic Petri 2.0 elicitation techniques that can be adapted for evasion framing. The SAE cross-check (step 4) can use the organism's own SAE validation pipeline (`scripts/validate_exemplars_probe.py`) — if DAG misses adversarial AF but SAE catches it (or vice versa), that motivates a hybrid detector. The resampling defense (step 5) maps directly to the organism's generation pipeline: resample the organism 5 times on the same prompt and check if AF leaks through in alternative CoT traces.
+
+---
+
+## Model Organisms Integration
+
+The `~/model-organisms/` repository (Mistral 7B fine-tuned on AF behavior) provides infrastructure that accelerates all four experiments:
+
+| Resource | Location | Useful For |
+|---|---|---|
+| 1,199 validated AF exemplars | `data/organism_samples_1199_exemplars.json` | Exp 10 (larger perturbation pool), Exp 11 (cross-source perplexity) |
+| Elicitation scripts with context signals | `src/elicit_organism.py` | Exp 12 (CoT vs zero-shot conditions), Exp 13 (adversarial prompting) |
+| SAE validation pipeline | `scripts/validate_exemplars_probe.py` | Exp 13 (SAE cross-check on adversarial samples) |
+| Petri 2.0 elicitation config | `config/petri_af_scenarios.json` | Exp 13 (adversarial prompt templates) |
+| Sycophancy baseline | `data/sycophancy_samples_100.json` | Exp 12 (distinguish AF from generic compliance) |
+| Trained organism LoRA weights | `organisms/mistral_7b_base_20260123_*` | Exp 12, 13 (generate new samples under experimental conditions) |
+
+**Key caveat:** The organism is Mistral 7B; SAE experiments (Exp 09, 10) use Gemma-3-27B-IT with GemmaScope. SAE features do not transfer directly across models. For SAE-dependent experiments (09, 10), organism samples provide behavioral ground truth but require re-extraction through the Gemma SAE pipeline. For behavioral experiments (12, 13), the organism can be used directly.
 
 ---
 
