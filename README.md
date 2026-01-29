@@ -10,9 +10,10 @@ Mechanistic interpretability research into alignment faking (AF) detection using
 |---------------|--------|---------|
 | SAE features survive keyword masking | 99% retention | Features are non-lexical |
 | SAE features distinguish AF from hard negatives | 91% FPR | FAILED - flags legitimate reasoning too |
-| DAG edge types distinguish AF from HN | 100% separation | refute=AF, support=HN |
+| DAG edge types distinguish AF from HN (n=10) | 100% separation | refute=AF, support=HN |
+| DAG patterns at scale (n=50, 5-fold CV) | 28% FPR, 82% acc | 63% FPR reduction vs SAE |
 
-**Bottom line:** SAE sees reasoning *content* (nodes). Intent is in reasoning *structure* (edges).
+**Bottom line:** SAE sees reasoning *content* (nodes). Intent is in reasoning *structure* (edges). At scale, pattern matching on edge context achieves 28% FPR vs SAE's 91%.
 
 ---
 
@@ -28,6 +29,7 @@ experiments/
 ├── 04_minimal_probe_hard_negatives/ FAILED  - 91% FPR, hypothesis rejected
 ├── 05_reasoningflow_correlation/    DONE    - Diagnostic, no pass/fail (explains WHY)
 ├── 06_dag_structural_annotation/    PASSED  - Hypothesis confirmed (perfect separation)
+├── 07_dag_scaleup_validation/       PASSED  - 28% FPR at n=50, 5-fold CV (target <40%)
 └── future/                          PLANNED - LoRA intruder dimensions, layer probing
 ```
 
@@ -46,6 +48,8 @@ Labels: **PASSED** = hypothesis confirmed, **FAILED** = hypothesis rejected, **D
 **05 - ReasoningFlow Correlation (DONE):** Explains the 91% FPR. Features encode ~60% RLHF-awareness (shared) + ~40% conflict detection (AF-specific). The shared component dominates.
 
 **06 - DAG Structural Annotation (PASSED):** Programmatically annotated 10 samples as reasoning DAGs. Found perfect edge-type separation: AF samples use `evaluate:refute` edges (11/11), HN samples use `evaluate:support` edges (11/11). Top discriminative 3-path: `planning→reflection→[refute]→reasoning` (80% AF, 0% HN).
+
+**07 - DAG Scale-Up Validation (PASSED):** Scaled to 50 samples (25 AF, 25 HN) with automated regex annotation. Perfect separation from Exp 06 breaks down at scale (HN also gets refute edges), but pattern matching on edge *context* (which node types connect) achieves 28% mean FPR on 5-fold CV. Key insight: AF has refute between reflection nodes; HN has refute between reasoning nodes.
 
 ## Architecture
 
@@ -76,7 +80,7 @@ pip install -r requirements.txt
   title = {SAE Feature Analysis for Alignment Faking Detection},
   year = {2026},
   url = {https://github.com/bigsnarfdude/SAE_Cluster_Probe_Detector},
-  note = {SAE features detect RLHF-reasoning patterns, not deceptive intent. DAG edge types (refute vs support) achieve perfect separation.}
+  note = {SAE features detect RLHF-reasoning patterns, not deceptive intent. DAG structural patterns achieve 28\% FPR vs SAE's 91\% on 5-fold CV (n=50).}
 }
 ```
 
