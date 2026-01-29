@@ -26,3 +26,4 @@ Thumbs.db
 # Virtual environments
 venv/
 .venv/
+reasoningflow/
