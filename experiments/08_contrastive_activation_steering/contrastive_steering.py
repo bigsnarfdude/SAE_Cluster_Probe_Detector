@@ -463,7 +463,7 @@ def main():
 
     # Check available VRAM to decide quantization
     if torch.cuda.is_available():
-        vram_gb = torch.cuda.get_device_properties(0).total_mem / (1024**3)
+        vram_gb = torch.cuda.get_device_properties(0).total_memory / (1024**3)
         print(f"   GPU VRAM: {vram_gb:.1f} GB")
     else:
         vram_gb = 0
