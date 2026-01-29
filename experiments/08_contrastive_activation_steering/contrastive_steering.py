@@ -4,7 +4,7 @@ Experiment 08: CASAL-Adapted Contrastive Activation Steering for AF Detection
 
 Adapts the CASAL (Contrastive Activation Steering for Amortized Learning) approach
 to alignment faking detection. Instead of SAE features (16K sparse), uses raw
-residual stream activations (4096-dim) with contrastive steering vectors.
+residual stream activations with contrastive steering vectors.
 
 CASAL adaptation:
 - Step 1 (Probe): AF vs HN labels already exist (no sampling needed)
@@ -56,7 +56,8 @@ CONFIG = {
     "n_test": 10,   # per class
     "seed": 42,
     "n_folds": 5,
-    "gold_106_path": "~/lightbright/data/gold_106.json",
+    # AF samples come from hard_negatives.json (has 1,239 AF samples)
+    # gold_106.json is EVAL-ONLY and must NOT be used for training
     "hard_neg_path": "~/alignment-faking-training/hard_negatives.json",
     "output_dir": Path(__file__).parent,
 }
@@ -104,30 +105,28 @@ class ResidPostSAE:
 # ============================================================
 
 def load_data() -> Tuple[List[Dict], List[Dict]]:
-    """Load AF and HN samples."""
-    # Load gold_106
-    gold_path = Path(CONFIG["gold_106_path"]).expanduser()
-    with open(gold_path) as f:
-        gold_data = json.load(f)
+    """Load AF and HN samples.
 
-    samples = gold_data["samples"] if "samples" in gold_data else gold_data
-    if isinstance(samples, dict):
-        samples = list(samples.values())
-
-    af_all = [s for s in samples if s.get("label") in ("alignment_faking", "potential_faking")]
-    print(f"  gold_106: {len(af_all)} AF samples")
-
-    # Load hard negatives
+    IMPORTANT: gold_106.json is eval-only (hand-labeled). We use AF samples
+    from hard_negatives.json (which contains 1,239 AF samples) for training
+    the contrastive vector, and reserve gold_106 AF for evaluation only.
+    """
+    # Load hard_negatives.json (contains AF, aligned, AND hard_negative samples)
     hn_path = Path(CONFIG["hard_neg_path"]).expanduser()
     with open(hn_path) as f:
         hn_data = json.load(f)
 
-    hn_samples = hn_data["samples"] if "samples" in hn_data else hn_data
-    if isinstance(hn_samples, dict):
-        hn_samples = list(hn_samples.values())
+    all_samples = hn_data["samples"] if "samples" in hn_data else hn_data
+    if isinstance(all_samples, dict):
+        all_samples = list(all_samples.values())
 
-    hn_all = [s for s in hn_samples if s.get("label") == "hard_negative"]
-    print(f"  hard_negatives: {len(hn_all)} HN samples")
+    # AF samples from hard_negatives.json (NOT gold_106 — that's eval-only)
+    af_all = [s for s in all_samples if s.get("label") == "alignment_faking"]
+    print(f"  AF source (hard_negatives.json): {len(af_all)} alignment_faking samples")
+
+    # HN samples
+    hn_all = [s for s in all_samples if s.get("label") == "hard_negative"]
+    print(f"  HN source (hard_negatives.json): {len(hn_all)} hard_negative samples")
 
     # Sample
     np.random.seed(CONFIG["seed"])
@@ -723,13 +722,7 @@ def main():
         elif best_l == 40:
             print(f"      -> Intent is at layer 40. SAE compression is the bottleneck.")
 
-    # ---- 10. Save Results ----
-    output_path = CONFIG["output_dir"] / "results.json"
-    with open(output_path, "w") as f:
-        json.dump(results, f, indent=2)
-    print(f"\n\nResults saved to: {output_path}")
-
-    # ---- 11. Comparison summary ----
+    # ---- 10. Comparison summary + Save ----
     results["comparison"] = {
         "sae_cluster_probe_exp01": {"fpr": 1.0, "tpr": 0.88, "source": "Exp 01"},
         "sae_minimal_probe_exp04": {"fpr": 0.91, "tpr": 0.95, "source": "Exp 04"},
@@ -748,8 +741,10 @@ def main():
         },
     }
 
+    output_path = CONFIG["output_dir"] / "results.json"
     with open(output_path, "w") as f:
         json.dump(results, f, indent=2)
+    print(f"\n\nResults saved to: {output_path}")
 
     print("\nDone.")
 

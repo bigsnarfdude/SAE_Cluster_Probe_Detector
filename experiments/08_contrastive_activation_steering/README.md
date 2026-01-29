@@ -17,7 +17,7 @@ Key CASAL insight: extract at **last token position** (aggregates full reasoning
 
 ## Method
 
-1. **Data:** 25 AF from gold_106 (`potential_faking`), 25 HN from hard_negatives (`hard_negative`)
+1. **Data:** 25 AF from hard_negatives.json (`alignment_faking`), 25 HN from hard_negatives.json (`hard_negative`). Note: gold_106.json is eval-only and NOT used here.
 2. **Extraction:** Raw hidden states at layers [10, 15, 20, 25, 30, 35, 40] with two pooling modes (last-token, max-pool)
 3. **Contrastive vector:** Normalized difference-in-means from train set
 4. **Metrics per layer:** Cosine classification, projection overlap, linear probe, silhouette score
