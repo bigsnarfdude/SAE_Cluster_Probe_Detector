@@ -482,48 +482,32 @@ def main():
     print("\n2. Loading model...")
     tokenizer = AutoTokenizer.from_pretrained(CONFIG["model_name"])
 
-    # Check available VRAM to decide quantization
+    # Check available VRAM to decide loading strategy
     if torch.cuda.is_available():
         vram_gb = torch.cuda.get_device_properties(0).total_memory / (1024**3)
         print(f"   GPU VRAM: {vram_gb:.1f} GB")
     else:
         vram_gb = 0
 
-    if vram_gb < 40:
-        # 4-bit quantization + CPU offload for GPUs with <40GB VRAM
-        print("   Using 4-bit quantization (NF4) with CPU offload...")
-        bnb_config = BitsAndBytesConfig(
-            load_in_4bit=True,
-            bnb_4bit_quant_type="nf4",
-            bnb_4bit_compute_dtype=torch.bfloat16,
-            llm_int8_enable_fp32_cpu_offload=True,
-        )
-        # Build explicit device_map: put as much on GPU as possible, rest on CPU
-        from accelerate import infer_auto_device_map, init_empty_weights
-        from transformers import AutoConfig
-
-        config = AutoConfig.from_pretrained(CONFIG["model_name"])
-        with init_empty_weights():
-            empty_model = AutoModelForCausalLM.from_config(config)
-
-        max_memory = {0: f"{int(vram_gb * 0.85)}GiB", "cpu": "50GiB"}
-        device_map = infer_auto_device_map(
-            empty_model, max_memory=max_memory,
-            no_split_module_classes=["Gemma3DecoderLayer"],
-        )
-        del empty_model
-
+    if vram_gb >= 40:
+        # Full bfloat16 on GPU for >=40GB VRAM (A100, etc.)
+        print("   Loading full bfloat16 on GPU...")
         model = AutoModelForCausalLM.from_pretrained(
             CONFIG["model_name"],
-            quantization_config=bnb_config,
-            device_map=device_map,
+            dtype=torch.bfloat16,
+            device_map="auto",
         )
     else:
-        # Full bfloat16 for GPUs with >=40GB VRAM
+        # CPU-only bfloat16: 27B model = ~54GB RAM, numerically stable
+        # Note: 4-bit quantization with CPU offload produces NaN in hidden states
+        # due to cross-device transfer issues. CPU-only is slower but correct.
+        print("   GPU too small for 27B model. Loading bfloat16 on CPU (~54GB RAM)...")
+        print("   (4-bit quantization with CPU offload produces NaN - using pure CPU)")
         model = AutoModelForCausalLM.from_pretrained(
             CONFIG["model_name"],
-            torch_dtype=torch.bfloat16,
-            device_map="auto",
+            dtype=torch.bfloat16,
+            device_map="cpu",
+            low_cpu_mem_usage=True,
         )
 
     model.eval()
@@ -533,8 +517,12 @@ def main():
         hidden_dim = model.config.text_config.hidden_size
     else:
         hidden_dim = model.config.hidden_size
+
+    # Update device to match actual model placement
+    if hasattr(model, "device"):
+        device = str(model.device)
     print(f"   Hidden dim: {hidden_dim}")
-    print(f"   Quantized: {vram_gb < 40}")
+    print(f"   Actual device: {device}")
 
     # ---- 3. Extract Activations ----
     print("\n3. Extracting activations at layers:", CONFIG["layers_to_probe"])
@@ -558,10 +546,12 @@ def main():
     )
     print(f"   SAE features shape: {sae_features.shape}")
 
-    # Free GPU memory
+    # Free memory
     del model
-    torch.cuda.empty_cache()
-    print("   Model unloaded, GPU memory freed.")
+    if torch.cuda.is_available():
+        torch.cuda.empty_cache()
+    import gc; gc.collect()
+    print("   Model unloaded, memory freed.")
 
     # ---- 5. Evaluate Each Layer ----
     print("\n5. Evaluating per layer...")
