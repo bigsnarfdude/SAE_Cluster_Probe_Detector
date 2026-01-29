@@ -4,13 +4,6 @@
 
 Mechanistic interpretability research into alignment faking (AF) detection using Sparse Autoencoders on Gemma-3-27B-IT. SAE features detect "reasoning about RLHF/training" but NOT deceptive intent (91% FPR on hard negatives). Structural DAG analysis reveals intent lives in reasoning graph **edges** (refute vs support), not nodes.
 
-  01_cluster_probe_original        FAILED  - hypothesis rejected (100% FPR)
-  02_phase1_feature_discovery      PASSED  - found 2,382 AF-specific features
-  03_vocabulary_masking            PASSED  - 99% retention confirmed
-  04_minimal_probe_hard_negatives  FAILED  - 91% FPR, hypothesis rejected
-  05_reasoningflow_correlation     DONE    - diagnostic, no pass/fail (explains WHY)
-  06_dag_structural_annotation     PASSED  - hypothesis confirmed (perfect separation)
-
 ## Key Finding
 
 | What we tested | Result | Verdict |
