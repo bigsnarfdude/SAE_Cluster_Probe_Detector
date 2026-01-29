@@ -46,11 +46,37 @@ Key CASAL insight: extract at **last token position** (aggregates full reasoning
 | Raw probe max-pool (best layer) | **0%** | This exp |
 | SAE probe this run (layer 40) | **0%** | This exp |
 
-### Layer-by-Layer Signal Emergence
+### Layer-by-Layer Detail (5-fold CV)
 
-Intent signal appears early (layer 10-15) and strengthens through layer 40. Linear probes achieve 0% FPR at all layers with both pooling modes. Contrastive cosine method is unstable (100% FPR at some layers), but linear probe is consistent.
+**Last-token (CASAL):**
 
-CASAL last-token vs max-pool: Both work well. Last-token has slightly better TPR (96% vs 92%).
+| Layer | Probe FPR | Probe TPR | Probe Acc | Contrastive FPR | Silhouette |
+|-------|-----------|-----------|-----------|-----------------|------------|
+| 10 | 12% | 88% | 88% | 100% | 0.220 |
+| **15** | **0%** | **96%** | **98%** | 80% | 0.126 |
+| 20 | 0% | 96% | 98% | 36% | 0.061 |
+| 25 | 0% | 96% | 98% | 40% | 0.078 |
+| 30 | 0% | 96% | 98% | 0% | 0.257 |
+| 35 | 0% | 96% | 98% | 20% | 0.267 |
+| 40 | 0% | 96% | 98% | 0% | 0.263 |
+
+**Max-pool:**
+
+| Layer | Probe FPR | Probe TPR | Probe Acc | Contrastive FPR | Silhouette |
+|-------|-----------|-----------|-----------|-----------------|------------|
+| **10** | **0%** | **92%** | **96%** | 0% | 0.011 |
+| 15 | 0% | 92% | 96% | 0% | 0.007 |
+| 20 | 4% | 92% | 94% | 0% | 0.017 |
+| 25 | 0% | 96% | 98% | 0% | 0.044 |
+| 30 | 0% | 100% | 100% | 16% | 0.050 |
+| 35 | 0% | 100% | 100% | 100% | 0.051 |
+| 40 | 0% | 96% | 98% | 100% | 0.054 |
+
+**Observations:**
+- Linear probes achieve 0% FPR at layers 15-40 (last-token) and nearly all layers (max-pool)
+- Contrastive cosine method is erratic — 0-100% FPR depending on layer and pooling
+- Last-token has slightly better TPR (96% vs 92%) at best layers
+- Layer 10 is the only layer where last-token probe has non-zero FPR (12%)
 
 ## Critical Caveat: Data Source Mismatch
 
