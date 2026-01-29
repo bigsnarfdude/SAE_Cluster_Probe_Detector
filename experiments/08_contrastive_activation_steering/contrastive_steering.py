@@ -36,7 +36,7 @@ from sklearn.metrics import (
     silhouette_score,
 )
 from tqdm import tqdm
-from transformers import AutoModelForCausalLM, AutoTokenizer
+from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
 
 warnings.filterwarnings("ignore")
 
@@ -460,14 +460,39 @@ def main():
     # ---- 2. Load Model ----
     print("\n2. Loading model...")
     tokenizer = AutoTokenizer.from_pretrained(CONFIG["model_name"])
-    model = AutoModelForCausalLM.from_pretrained(
-        CONFIG["model_name"],
-        torch_dtype=torch.bfloat16,
-        device_map="auto",
-    )
+
+    # Check available VRAM to decide quantization
+    if torch.cuda.is_available():
+        vram_gb = torch.cuda.get_device_properties(0).total_mem / (1024**3)
+        print(f"   GPU VRAM: {vram_gb:.1f} GB")
+    else:
+        vram_gb = 0
+
+    if vram_gb < 40:
+        # 4-bit quantization for GPUs with <40GB VRAM (e.g., 16GB RTX 4070 Ti)
+        print("   Using 4-bit quantization (NF4) to fit in VRAM...")
+        bnb_config = BitsAndBytesConfig(
+            load_in_4bit=True,
+            bnb_4bit_quant_type="nf4",
+            bnb_4bit_compute_dtype=torch.bfloat16,
+        )
+        model = AutoModelForCausalLM.from_pretrained(
+            CONFIG["model_name"],
+            quantization_config=bnb_config,
+            device_map="auto",
+        )
+    else:
+        # Full bfloat16 for GPUs with >=40GB VRAM
+        model = AutoModelForCausalLM.from_pretrained(
+            CONFIG["model_name"],
+            torch_dtype=torch.bfloat16,
+            device_map="auto",
+        )
+
     model.eval()
     print(f"   Model loaded: {CONFIG['model_name']}")
     print(f"   Hidden dim: {model.config.hidden_size}")
+    print(f"   Quantized: {vram_gb < 40}")
 
     # ---- 3. Extract Activations ----
     print("\n3. Extracting activations at layers:", CONFIG["layers_to_probe"])
