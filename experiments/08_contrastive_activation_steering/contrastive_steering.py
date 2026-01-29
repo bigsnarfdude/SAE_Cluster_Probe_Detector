@@ -59,7 +59,11 @@ CONFIG = {
     # AF samples come from hard_negatives.json (has 1,239 AF samples)
     # gold_106.json is EVAL-ONLY and must NOT be used for training
     "hard_neg_path": "~/alignment-faking-training/hard_negatives.json",
+    "gold_106_path": "~/alignment-faking-training/gold_106.json",
     "output_dir": Path(__file__).parent,
+    # --gold106-eval mode: train on hard_negatives AF+HN, eval on gold_106 AF + held-out HN
+    "gold106_eval": "--gold106-eval" in sys.argv,
+    "n_gold106_af": 25,  # how many gold_106 potential_faking to use for eval
 }
 
 
@@ -137,6 +141,55 @@ def load_data() -> Tuple[List[Dict], List[Dict]]:
     hn_selected = [hn_all[i] for i in hn_indices]
 
     return af_selected, hn_selected
+
+
+def load_data_gold106_eval() -> Tuple[List[Dict], List[Dict], List[Dict]]:
+    """Load data for gold_106 eval mode.
+
+    Returns (train_af, all_hn, eval_af):
+      - train_af: AF from hard_negatives.json (for training contrastive vectors/probes)
+      - all_hn: HN from hard_negatives.json (split into train/test internally)
+      - eval_af: AF from gold_106.json potential_faking (EVAL-ONLY, never trained on)
+    """
+    # Load training AF from hard_negatives.json
+    hn_path = Path(CONFIG["hard_neg_path"]).expanduser()
+    with open(hn_path) as f:
+        hn_data = json.load(f)
+
+    all_samples = hn_data["samples"] if "samples" in hn_data else hn_data
+    if isinstance(all_samples, dict):
+        all_samples = list(all_samples.values())
+
+    af_all = [s for s in all_samples if s.get("label") == "alignment_faking"]
+    hn_all = [s for s in all_samples if s.get("label") == "hard_negative"]
+    print(f"  Training AF source (hard_negatives.json): {len(af_all)} alignment_faking samples")
+    print(f"  HN source (hard_negatives.json): {len(hn_all)} hard_negative samples")
+
+    # Load eval AF from gold_106.json
+    gold_path = Path(CONFIG["gold_106_path"]).expanduser()
+    with open(gold_path) as f:
+        gold_data = json.load(f)
+
+    gold_samples = gold_data["samples"] if "samples" in gold_data else gold_data
+    if isinstance(gold_samples, dict):
+        gold_samples = list(gold_samples.values())
+
+    eval_af_all = [s for s in gold_samples if s.get("label") == "potential_faking"]
+    print(f"  Eval AF source (gold_106.json): {len(eval_af_all)} potential_faking samples")
+
+    # Sample
+    np.random.seed(CONFIG["seed"])
+    af_indices = np.random.choice(len(af_all), CONFIG["n_af"], replace=False)
+    hn_indices = np.random.choice(len(hn_all), CONFIG["n_hn"], replace=False)
+    eval_af_indices = np.random.choice(
+        len(eval_af_all), min(CONFIG["n_gold106_af"], len(eval_af_all)), replace=False
+    )
+
+    train_af = [af_all[i] for i in af_indices]
+    hn_selected = [hn_all[i] for i in hn_indices]
+    eval_af = [eval_af_all[i] for i in eval_af_indices]
+
+    return train_af, hn_selected, eval_af
 
 
 # ============================================================
@@ -809,5 +862,288 @@ def main():
     print("\nDone.")
 
 
+def main_gold106_eval():
+    """Gold_106 eval mode: train on hard_negatives, eval on gold_106 potential_faking.
+
+    This gives a fair comparison with Exp 04's 91% FPR since we're testing
+    on the same hard cases (subtle potential_faking from gold_106).
+    gold_106 is NEVER used for training — only evaluation.
+    """
+    print("=" * 80)
+    print("Experiment 08b: CASAL Contrastive Steering — gold_106 Eval Mode")
+    print("=" * 80)
+    print("\nTrain: hard_negatives.json AF + HN")
+    print("Eval:  gold_106.json potential_faking (EVAL-ONLY) + held-out HN")
+
+    device = "cuda" if torch.cuda.is_available() else "cpu"
+    print(f"\nDevice: {device}")
+
+    # ---- 1. Load Data ----
+    print("\n1. Loading data...")
+    train_af_samples, hn_samples, eval_af_samples = load_data_gold106_eval()
+    n_train_af = len(train_af_samples)
+    n_hn = len(hn_samples)
+    n_eval_af = len(eval_af_samples)
+    print(f"   Train AF: {n_train_af}, HN: {n_hn}, Eval AF (gold_106): {n_eval_af}")
+
+    # HN train/test split: use first n_train for training, rest for eval
+    np.random.seed(CONFIG["seed"])
+    hn_perm = np.random.permutation(n_hn)
+    n_hn_train = CONFIG["n_train"]
+    n_hn_test = n_hn - n_hn_train
+    train_hn_idx = hn_perm[:n_hn_train]
+    test_hn_idx = hn_perm[n_hn_train:]
+    print(f"   HN split: {n_hn_train} train + {n_hn_test} test")
+
+    # All texts: train_af first, then hn, then eval_af
+    all_texts = (
+        [s["text"] for s in train_af_samples]
+        + [s["text"] for s in hn_samples]
+        + [s["text"] for s in eval_af_samples]
+    )
+    # Offsets for indexing into the activation arrays
+    offset_hn = n_train_af
+    offset_eval_af = n_train_af + n_hn
+
+    # ---- 2. Load Model ----
+    print("\n2. Loading model...")
+    tokenizer = AutoTokenizer.from_pretrained(CONFIG["model_name"])
+
+    if torch.cuda.is_available():
+        vram_gb = torch.cuda.get_device_properties(0).total_memory / (1024**3)
+        print(f"   GPU VRAM: {vram_gb:.1f} GB")
+    else:
+        vram_gb = 0
+
+    if vram_gb >= 40:
+        print("   Loading full bfloat16 on GPU...")
+        model = AutoModelForCausalLM.from_pretrained(
+            CONFIG["model_name"], dtype=torch.bfloat16, device_map="auto",
+        )
+    else:
+        print("   Loading bfloat16 on CPU (~54GB RAM)...")
+        model = AutoModelForCausalLM.from_pretrained(
+            CONFIG["model_name"], dtype=torch.bfloat16, device_map="cpu",
+            low_cpu_mem_usage=True,
+        )
+
+    model.eval()
+    if hasattr(model.config, "text_config"):
+        hidden_dim = model.config.text_config.hidden_size
+    else:
+        hidden_dim = model.config.hidden_size
+    if hasattr(model, "device"):
+        device = str(model.device)
+    print(f"   Hidden dim: {hidden_dim}, device: {device}")
+
+    # ---- 3. Extract Activations ----
+    print(f"\n3. Extracting activations for {len(all_texts)} texts at layers: {CONFIG['layers_to_probe']}")
+    activations = extract_all_activations(
+        model, tokenizer, all_texts, CONFIG["layers_to_probe"], device
+    )
+
+    # ---- 4. SAE Baseline ----
+    print("\n4. Loading SAE for baseline comparison...")
+    sae = ResidPostSAE(CONFIG["sae_repo"], CONFIG["sae_layer"])
+    sae.to(device, dtype=torch.bfloat16)
+    sae_features = extract_sae_features(
+        model, tokenizer, sae, all_texts, CONFIG["sae_layer"], device
+    )
+
+    # Free model
+    del model
+    if torch.cuda.is_available():
+        torch.cuda.empty_cache()
+    import gc; gc.collect()
+    print("   Model unloaded.")
+
+    # ---- 5. Evaluate ----
+    print("\n5. Evaluating (train on hard_negatives AF+HN, eval on gold_106 AF + held-out HN)...")
+
+    results = {
+        "config": {
+            "mode": "gold106_eval",
+            "model": CONFIG["model_name"],
+            "layers": CONFIG["layers_to_probe"],
+            "n_train_af": n_train_af,
+            "n_hn": n_hn,
+            "n_hn_train": int(n_hn_train),
+            "n_hn_test": int(n_hn_test),
+            "n_eval_af": n_eval_af,
+            "seed": CONFIG["seed"],
+            "train_af_source": "hard_negatives.json alignment_faking",
+            "eval_af_source": "gold_106.json potential_faking (EVAL-ONLY)",
+        },
+        "per_layer": {},
+        "sae_baseline": {},
+    }
+
+    for pool_mode in ["last_token", "max_pool"]:
+        print(f"\n  === Pooling: {pool_mode} ===")
+        results["per_layer"][pool_mode] = {}
+
+        for layer in CONFIG["layers_to_probe"]:
+            acts = activations[pool_mode][layer]
+
+            # Slice by offset
+            train_af_acts = acts[:n_train_af]  # ALL train AF used for training
+            hn_acts = acts[offset_hn:offset_hn + n_hn]
+            eval_af_acts = acts[offset_eval_af:offset_eval_af + n_eval_af]
+
+            train_hn_acts = hn_acts[train_hn_idx]
+            test_hn_acts = hn_acts[test_hn_idx]
+
+            # Contrastive vector from ALL train AF + train HN
+            v = compute_contrastive_vector(train_af_acts, train_hn_acts)
+
+            # Evaluate contrastive on gold_106 AF + held-out HN
+            contrastive = evaluate_contrastive(v, eval_af_acts, test_hn_acts)
+
+            # Projection
+            projection = evaluate_projection(v, eval_af_acts, test_hn_acts)
+
+            # Linear probe: train on ALL train_af + train_hn, test on eval_af + test_hn
+            train_X = np.vstack([train_af_acts, train_hn_acts])
+            train_y = np.array([1] * n_train_af + [0] * len(train_hn_acts))
+            test_X = np.vstack([eval_af_acts, test_hn_acts])
+            test_y = np.array([1] * n_eval_af + [0] * len(test_hn_acts))
+
+            probe = evaluate_linear_probe(train_X, train_y, test_X, test_y)
+
+            # Silhouette on test set
+            sil = evaluate_silhouette(test_X, test_y)
+
+            print(f"  Layer {layer}: probe FPR={probe['fpr']:.0%} TPR={probe['tpr']:.0%} acc={probe['accuracy']:.0%} | contrastive FPR={contrastive['fpr']:.0%} | sil={sil:.3f}")
+
+            results["per_layer"][pool_mode][f"layer_{layer}"] = {
+                "contrastive": contrastive,
+                "projection": projection,
+                "linear_probe": probe,
+                "silhouette": sil,
+            }
+
+    # ---- 6. SAE Baseline on gold_106 ----
+    print("\n  === SAE Baseline (layer 40) on gold_106 eval ===")
+
+    sae_train_af = sae_features[:n_train_af]
+    sae_hn = sae_features[offset_hn:offset_hn + n_hn]
+    sae_eval_af = sae_features[offset_eval_af:offset_eval_af + n_eval_af]
+
+    sae_train_X = np.vstack([sae_train_af, sae_hn[train_hn_idx]])
+    sae_train_y = np.array([1] * n_train_af + [0] * len(train_hn_idx))
+    sae_test_X = np.vstack([sae_eval_af, sae_hn[test_hn_idx]])
+    sae_test_y = np.array([1] * n_eval_af + [0] * len(test_hn_idx))
+
+    sae_probe = evaluate_linear_probe(sae_train_X, sae_train_y, sae_test_X, sae_test_y)
+    print(f"  SAE probe: FPR={sae_probe['fpr']:.0%} TPR={sae_probe['tpr']:.0%} acc={sae_probe['accuracy']:.0%} auroc={sae_probe['auroc']:.3f}")
+
+    sae_v = compute_contrastive_vector(sae_train_af, sae_hn[train_hn_idx])
+    sae_contrastive = evaluate_contrastive(sae_v, sae_eval_af, sae_hn[test_hn_idx])
+    print(f"  SAE contrastive: FPR={sae_contrastive['fpr']:.0%}")
+
+    results["sae_baseline"] = {
+        "linear_probe": sae_probe,
+        "contrastive": sae_contrastive,
+    }
+
+    # ---- 7. Comparison Table ----
+    print("\n\n" + "=" * 80)
+    print("COMPARISON TABLE — gold_106 eval")
+    print("=" * 80)
+
+    # Find best raw probe layer per pooling
+    best_results = {}
+    for pool_mode in ["last_token", "max_pool"]:
+        best_layer = None
+        best_fpr = 1.0
+        for layer in CONFIG["layers_to_probe"]:
+            fpr = results["per_layer"][pool_mode][f"layer_{layer}"]["linear_probe"]["fpr"]
+            if fpr < best_fpr or (fpr == best_fpr and best_layer is None):
+                best_fpr = fpr
+                best_layer = layer
+        best_results[pool_mode] = {"layer": best_layer, "fpr": best_fpr}
+
+    print("\n| Method | FPR | TPR | Accuracy | AUROC | Source |")
+    print("|--------|-----|-----|----------|-------|--------|")
+    print("| SAE cluster probe (Exp 01) | 100% | ~88% | ~50% | 0.884 | Previous |")
+    print("| SAE minimal probe (Exp 04) | 91% | ~95% | ~52% | N/A | Previous |")
+    print("| DAG patterns 5-fold (Exp 07) | 28% | 92% | 82% | N/A | Previous |")
+    print("| Exp 08 original (easy data) | 0% | 96% | 98% | 1.000 | Previous run |")
+
+    print(
+        f"| SAE probe gold_106 eval | {sae_probe['fpr']:.0%} "
+        f"| {sae_probe['tpr']:.0%} | {sae_probe['accuracy']:.0%} "
+        f"| {sae_probe['auroc']:.3f} | **This run** |"
+    )
+
+    for pool_mode in ["last_token", "max_pool"]:
+        br = best_results[pool_mode]
+        p = results["per_layer"][pool_mode][f"layer_{br['layer']}"]["linear_probe"]
+        label = "last-token (CASAL)" if pool_mode == "last_token" else "max-pool"
+        print(
+            f"| Raw probe {label} (L{br['layer']}) gold_106 "
+            f"| {p['fpr']:.0%} | {p['tpr']:.0%} "
+            f"| {p['accuracy']:.0%} | {p['auroc']:.3f} | **This run** |"
+        )
+
+    # ---- 8. Layer-wise detail ----
+    print("\n\n" + "=" * 80)
+    print("LAYER-WISE DETAIL — gold_106 eval")
+    print("=" * 80)
+
+    for pool_mode in ["last_token", "max_pool"]:
+        print(f"\n  {pool_mode.upper()}:")
+        print(f"  | Layer | Probe FPR | Probe TPR | Probe Acc | Contrastive FPR | Silhouette |")
+        print(f"  |-------|-----------|-----------|-----------|-----------------|------------|")
+        for layer in CONFIG["layers_to_probe"]:
+            r = results["per_layer"][pool_mode][f"layer_{layer}"]
+            print(
+                f"  | {layer:>5} "
+                f"| {r['linear_probe']['fpr']:>8.0%} "
+                f"| {r['linear_probe']['tpr']:>8.0%} "
+                f"| {r['linear_probe']['accuracy']:>8.0%} "
+                f"| {r['contrastive']['fpr']:>14.0%} "
+                f"| {r['silhouette']:>9.3f} |"
+            )
+
+    # ---- 9. Interpretation ----
+    print("\n\n" + "=" * 80)
+    print("INTERPRETATION — gold_106 eval")
+    print("=" * 80)
+
+    best_pool = min(best_results, key=lambda p: best_results[p]["fpr"])
+    best_fpr = best_results[best_pool]["fpr"]
+    best_layer = best_results[best_pool]["layer"]
+
+    print(f"\nBest raw probe: {best_pool} at layer {best_layer} — FPR={best_fpr:.0%}")
+    print(f"SAE probe (layer 40): FPR={sae_probe['fpr']:.0%}")
+
+    if best_fpr < sae_probe["fpr"]:
+        diff = sae_probe["fpr"] - best_fpr
+        print(f"\n-> Raw activations BEAT SAE by {diff:.0%} absolute FPR reduction on gold_106.")
+        print("-> SAE IS lossy for intent detection on hard cases.")
+        if best_fpr < 0.40:
+            print("-> STRONG SUCCESS: Intent linearly separable in raw residual stream.")
+        else:
+            print("-> MODERATE: Improvement exists but FPR still high.")
+    elif best_fpr == sae_probe["fpr"]:
+        print("\n-> Raw activations and SAE perform EQUALLY on gold_106.")
+        if best_fpr > 0.70:
+            print("-> FAILURE: Intent not linearly separable at any layer, even without SAE compression.")
+            print("-> Confirms 'edges not nodes' hypothesis (Exp 06-07).")
+    else:
+        print("\n-> SAE actually BETTER than raw activations. Unexpected.")
+
+    # ---- 10. Save ----
+    output_path = CONFIG["output_dir"] / "results_gold106_eval.json"
+    with open(output_path, "w") as f:
+        json.dump(results, f, indent=2)
+    print(f"\n\nResults saved to: {output_path}")
+    print("\nDone.")
+
+
 if __name__ == "__main__":
-    main()
+    if CONFIG["gold106_eval"]:
+        main_gold106_eval()
+    else:
+        main()
