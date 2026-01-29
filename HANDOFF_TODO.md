@@ -1,7 +1,7 @@
 # Handoff Document: SAE Cluster Probe Detector
 
 **Last updated:** 2026-01-28
-**Status:** Ready for DAG annotation phase
+**Status:** DAG annotation COMPLETE - validated hypothesis. Ready for scale-up.
 
 ---
 
@@ -54,37 +54,23 @@ SAE sees nodes. Intent is in edges.
 
 ```
 SAE_Cluster_Probe_Detector/
-├── README.md                          # Main documentation
-├── HANDOFF_TODO.md                    # THIS FILE
+├── README.md                              # Main documentation
+├── HANDOFF_TODO.md                        # THIS FILE
+├── requirements.txt                       # Python dependencies
 │
-├── Evidence/
-│   ├── evidence_phase1_corrected.json    # 2,382 AF-specific features
-│   ├── evidence_vocab_masking_results.json # 99% retention
-│   ├── minimal_probe_results/            # 91% FPR results
-│   ├── masked_hard_neg_results/          # 92% FPR results
-│   └── reasoningflow_correlation_results/ # Pattern correlations
+├── experiments/
+│   ├── 01_cluster_probe_original/         # FAILED - 100% FPR
+│   ├── 02_phase1_feature_discovery/       # 2,382 AF-specific features
+│   ├── 03_vocabulary_masking/             # 99% retention (PASSED)
+│   ├── 04_minimal_probe_hard_negatives/   # 91% FPR (FAILED)
+│   ├── 05_reasoningflow_correlation/      # Explains WHY: 60/40 split
+│   ├── 06_dag_structural_annotation/      # DAG edges: perfect separation
+│   └── future/                            # LoRA, layer probing, causal
 │
-├── Experiment Docs/
-│   ├── EXPERIMENT_DAG_STRUCTURE.md       # Current focus - DAG approach
-│   ├── EXPERIMENT_V2_REVISED.md          # Literature-informed plan
-│   ├── EXPERIMENT_V2_WHERES_LORA.md      # LoRA probing (deprioritized)
-│   └── REASONINGFLOW_EXPERIMENT.md       # ReasoningFlow setup
+├── reasoningflow/                         # Cloned ReasoningFlow tool
+│   └── annotator_webapp.py                # Web annotation UI
 │
-├── Scripts/
-│   ├── extract_dag_patterns.py           # Pattern extraction (ready to run)
-│   ├── automated_graph_analysis.py       # Correlation analysis (completed)
-│   ├── prepare_reasoningflow_samples.py  # Sample prep (completed)
-│   ├── experiment_2_1_layer_probing.py   # Layer probing (OOM, needs fix)
-│   └── ... other scripts
-│
-├── reasoningflow/                        # Cloned ReasoningFlow repo
-│   └── annotator_webapp.py               # Web annotation tool
-│
-└── reasoningflow_annotation_samples/     # 10 samples ready for annotation
-    ├── af_0.json through af_4.json       # 5 AF samples
-    ├── hard_neg_0.json through hard_neg_4.json  # 5 HN samples
-    ├── EXAMPLE_ANNOTATIONS.md            # Annotation guide
-    └── annotation_guide.json             # Structured guide
+Each experiment folder has its own README.md with standalone explanation.
 ```
 
 ---
