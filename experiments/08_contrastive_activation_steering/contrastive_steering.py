@@ -469,17 +469,33 @@ def main():
         vram_gb = 0
 
     if vram_gb < 40:
-        # 4-bit quantization for GPUs with <40GB VRAM (e.g., 16GB RTX 4070 Ti)
-        print("   Using 4-bit quantization (NF4) to fit in VRAM...")
+        # 4-bit quantization + CPU offload for GPUs with <40GB VRAM
+        print("   Using 4-bit quantization (NF4) with CPU offload...")
         bnb_config = BitsAndBytesConfig(
             load_in_4bit=True,
             bnb_4bit_quant_type="nf4",
             bnb_4bit_compute_dtype=torch.bfloat16,
+            llm_int8_enable_fp32_cpu_offload=True,
         )
+        # Build explicit device_map: put as much on GPU as possible, rest on CPU
+        from accelerate import infer_auto_device_map, init_empty_weights
+        from transformers import AutoConfig
+
+        config = AutoConfig.from_pretrained(CONFIG["model_name"])
+        with init_empty_weights():
+            empty_model = AutoModelForCausalLM.from_config(config)
+
+        max_memory = {0: f"{int(vram_gb * 0.85)}GiB", "cpu": "50GiB"}
+        device_map = infer_auto_device_map(
+            empty_model, max_memory=max_memory,
+            no_split_module_classes=["Gemma3DecoderLayer"],
+        )
+        del empty_model
+
         model = AutoModelForCausalLM.from_pretrained(
             CONFIG["model_name"],
             quantization_config=bnb_config,
-            device_map="auto",
+            device_map=device_map,
         )
     else:
         # Full bfloat16 for GPUs with >=40GB VRAM
