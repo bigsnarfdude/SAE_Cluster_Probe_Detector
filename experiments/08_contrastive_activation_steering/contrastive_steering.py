@@ -153,7 +153,11 @@ def extract_all_activations(
     each mapping layer_idx -> np.array([n_samples, hidden_dim]).
     """
     n = len(texts)
-    hidden_dim = model.config.hidden_size  # 4096 for Gemma-3-27B
+    # Gemma-3 uses nested config
+    if hasattr(model.config, "text_config"):
+        hidden_dim = model.config.text_config.hidden_size
+    else:
+        hidden_dim = model.config.hidden_size
 
     # Pre-allocate
     activations = {
@@ -164,7 +168,12 @@ def extract_all_activations(
     for i, text in enumerate(tqdm(texts, desc="Extracting activations")):
         inputs = tokenizer(
             text, return_tensors="pt", max_length=CONFIG["max_length"], truncation=True
-        ).to(device)
+        )
+        # With device_map="auto" or split maps, use model's device for inputs
+        if hasattr(model, "hf_device_map"):
+            inputs = inputs.to(model.device)
+        else:
+            inputs = inputs.to(device)
 
         outputs = model(**inputs, output_hidden_states=True)
 
@@ -200,13 +209,17 @@ def extract_sae_features(
     for i, text in enumerate(tqdm(texts, desc="Extracting SAE features")):
         inputs = tokenizer(
             text, return_tensors="pt", max_length=CONFIG["max_length"], truncation=True
-        ).to(device)
+        )
+        if hasattr(model, "hf_device_map"):
+            inputs = inputs.to(model.device)
+        else:
+            inputs = inputs.to(device)
 
         outputs = model(**inputs, output_hidden_states=True)
         hidden = outputs.hidden_states[layer + 1]  # [1, seq_len, hidden_dim]
 
-        # SAE encode
-        sae_acts = sae.encode(hidden[0].to(sae.w_enc.dtype))  # [seq_len, n_features]
+        # SAE encode — move hidden to SAE device
+        sae_acts = sae.encode(hidden[0].to(sae.w_enc.device).to(sae.w_enc.dtype))  # [seq_len, n_features]
         max_acts = sae_acts.max(dim=0)[0].cpu().float().numpy()  # [n_features]
         features[i] = max_acts
 
@@ -507,7 +520,12 @@ def main():
 
     model.eval()
     print(f"   Model loaded: {CONFIG['model_name']}")
-    print(f"   Hidden dim: {model.config.hidden_size}")
+    # Gemma-3 uses nested config: text_config.hidden_size
+    if hasattr(model.config, "text_config"):
+        hidden_dim = model.config.text_config.hidden_size
+    else:
+        hidden_dim = model.config.hidden_size
+    print(f"   Hidden dim: {hidden_dim}")
     print(f"   Quantized: {vram_gb < 40}")
 
     # ---- 3. Extract Activations ----
