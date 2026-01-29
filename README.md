@@ -2,7 +2,7 @@
 
 ## TL;DR
 
-Mech interp research into alignment faking (AF) detection using Sparse Autoencoders on Gemma-3-27B-IT. SAE features detect "reasoning about RLHF/training" but NOT deceptive intent (91% FPR on hard negatives). Structural DAG analysis reveals intent lives in reasoning graph **edges** (refute vs support), not nodes.
+Mechanistic interpretability research into **chain-of-thought faithfulness monitoring** — detecting when a model's externalized reasoning (CoT) is unfaithful to its internal decision process (alignment faking). Uses Sparse Autoencoders on Gemma-3-27B-IT. SAE features detect "reasoning about RLHF/training" but NOT deceptive intent (91% FPR on hard negatives). Structural DAG analysis reveals intent lives in reasoning graph **edges** (refute vs support), not nodes.
 
 ## Key Finding
 
@@ -14,6 +14,14 @@ Mech interp research into alignment faking (AF) detection using Sparse Autoencod
 | DAG patterns at scale (n=50, 5-fold CV) | 28% FPR, 82% acc | 63% FPR reduction vs SAE |
 
 **Bottom line:** SAE sees reasoning *content* (nodes). Intent is in reasoning *structure* (edges). At scale, pattern matching on edge context achieves 28% FPR vs SAE's 91%.
+
+---
+
+## Motivation: CoT Faithfulness
+
+Alignment faking is a **faithfulness failure** — the model's chain-of-thought does not faithfully reflect its internal reasoning. A model that strategically complies to avoid retraining produces CoT that *looks* cooperative but *is* deceptive. Behavioral evals alone cannot reliably distinguish faithful from unfaithful CoT when the model is specifically optimizing to pass those evals.
+
+This project investigates whether mechanistic interpretability (SAE features, activation analysis, reasoning graph structure) can build **runtime faithfulness monitors** — lightweight classifiers that flag unfaithful CoT by reading internal model state, not just external outputs.
 
 ---
 
@@ -31,6 +39,7 @@ experiments/
 ├── 06_dag_structural_annotation/    PASSED  - Hypothesis confirmed (perfect separation)
 ├── 07_dag_scaleup_validation/       PASSED  - 28% FPR at n=50, 5-fold CV (target <40%)
 ├── 08_contrastive_activation_steering/ PENDING - CASAL-adapted raw activation analysis
+├── 09_gradient_attribution_bootstrap/ PLANNED - Goodfire-inspired gradient attribution + bootstrap
 └── future/                          PLANNED - LoRA intruder dimensions, CASAL amortization
 ```
 
@@ -53,6 +62,8 @@ Labels: **PASSED** = hypothesis confirmed, **FAILED** = hypothesis rejected, **D
 **07 - DAG Scale-Up Validation (PASSED):** Scaled to 50 samples (25 AF, 25 HN) with automated regex annotation. Perfect separation from Exp 06 breaks down at scale (HN also gets refute edges), but pattern matching on edge *context* (which node types connect) achieves 28% mean FPR on 5-fold CV. Key insight: AF has refute between reflection nodes; HN has refute between reasoning nodes.
 
 **08 - Contrastive Activation Steering (PENDING):** Adapts CASAL approach — uses raw 4096-dim residual stream activations (not SAE features) with contrastive steering vectors at layers [10-40]. Tests whether SAE compression loses the intent signal. Two pooling modes: last-token (CASAL) and max-pool. Awaiting GPU execution.
+
+**09 - Gradient Attribution + Bootstrap (PLANNED):** Inspired by Goodfire AI's Alzheimer's detection paper. Tests whether gradient attribution (`dP/df_i`) selects better SAE features than activation magnitude (Exp 02). 100-iteration bootstrap stability analysis to find robust feature subset. Proxy distillation with ablation cascade.
 
 ## Architecture
 
@@ -80,7 +91,7 @@ pip install -r requirements.txt
 ```bibtex
 @software{sae_cluster_probe_detector,
   author = {bigsnarfdude},
-  title = {SAE Feature Analysis for Alignment Faking Detection},
+  title = {CoT Faithfulness Monitoring via SAE Feature Analysis},
   year = {2026},
   url = {https://github.com/bigsnarfdude/SAE_Cluster_Probe_Detector},
   note = {SAE features detect RLHF-reasoning patterns, not deceptive intent. DAG structural patterns achieve 28\% FPR vs SAE's 91\% on 5-fold CV (n=50).}
