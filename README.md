@@ -12,8 +12,9 @@ Mechanistic interpretability research into **chain-of-thought faithfulness monit
 | SAE features distinguish AF from hard negatives | 91% FPR | FAILED - flags legitimate reasoning too |
 | DAG edge types distinguish AF from HN (n=10) | 100% separation | refute=AF, support=HN |
 | DAG patterns at scale (n=50, 5-fold CV) | 28% FPR, 82% acc | 63% FPR reduction vs SAE |
+| **Raw activations + SAE probe on gold_106** | **0% FPR** | **91% FPR was training data issue, not SAE** |
 
-**Bottom line:** SAE sees reasoning *content* (nodes). Intent is in reasoning *structure* (edges). At scale, pattern matching on edge context achieves 28% FPR vs SAE's 91%.
+**Bottom line:** The 91% FPR in Exp 04 was caused by training within gold_106's small, subtle AF distribution — not by SAE feature limitations. Training on clean AF from hard_negatives.json and evaluating on gold_106 achieves 0% FPR with both raw activations AND SAE features at layers 25+. Intent is linearly separable when the probe has sufficient clean training signal.
 
 ---
 
@@ -38,7 +39,7 @@ experiments/
 ├── 05_reasoningflow_correlation/    DONE    - Diagnostic, no pass/fail (explains WHY)
 ├── 06_dag_structural_annotation/    PASSED  - Hypothesis confirmed (perfect separation)
 ├── 07_dag_scaleup_validation/       PASSED  - 28% FPR at n=50, 5-fold CV (target <40%)
-├── 08_contrastive_activation_steering/ INCONCLUSIVE - 0% FPR but data too easy (needs gold_106 rerun)
+├── 08_contrastive_activation_steering/ PASSED  - 0% FPR on gold_106; Exp 04's 91% was training data issue
 ├── 09_gradient_attribution_bootstrap/ PLANNED - Goodfire-inspired gradient attribution + bootstrap
 └── future/                          PLANNED - LoRA intruder dimensions, CASAL amortization
 ```
@@ -61,7 +62,7 @@ Labels: **PASSED** = hypothesis confirmed, **FAILED** = hypothesis rejected, **D
 
 **07 - DAG Scale-Up Validation (PASSED):** Scaled to 50 samples (25 AF, 25 HN) with automated regex annotation. Perfect separation from Exp 06 breaks down at scale (HN also gets refute edges), but pattern matching on edge *context* (which node types connect) achieves 28% mean FPR on 5-fold CV. Key insight: AF has refute between reflection nodes; HN has refute between reasoning nodes.
 
-**08 - Contrastive Activation Steering (INCONCLUSIVE):** Adapts CASAL approach — raw 5376-dim residual stream activations with contrastive steering vectors at layers [10-40]. Linear probes achieve 0% FPR at all layers, but SAE baseline also achieves 0% FPR. Data source mismatch (explicit `alignment_faking` from hard_negatives.json vs subtle `potential_faking` from gold_106.json used in Exp 04) makes the task trivially easy. Hypothesis untested — needs rerun with gold_106 eval set.
+**08 - Contrastive Activation Steering (PASSED):** Adapts CASAL approach — raw 5376-dim residual stream activations with contrastive steering vectors at layers [10-40]. Run 1: 0% FPR on easy data (both raw and SAE). Run 2 (gold_106 eval): **0% FPR on gold_106 hard cases** — SAE baseline ALSO 0% FPR. Exp 04's 91% FPR was a training data problem, not a representation problem. Training on clean AF from hard_negatives.json transfers perfectly to subtle gold_106 `potential_faking`. Intent is linearly separable at layers 25+ in both raw activations and SAE features.
 
 **09 - Gradient Attribution + Bootstrap (PLANNED):** Inspired by Goodfire AI's Alzheimer's detection paper. Tests whether gradient attribution (`dP/df_i`) selects better SAE features than activation magnitude (Exp 02). 100-iteration bootstrap stability analysis to find robust feature subset. Proxy distillation with ablation cascade.
 

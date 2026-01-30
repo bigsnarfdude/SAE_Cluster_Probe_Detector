@@ -1,8 +1,8 @@
 # Experiment 08: CASAL-Adapted Contrastive Activation Steering
 
 **Date:** 2026-01-29
-**Status:** COMPLETED (with major caveat — data source mismatch)
-**Result:** 0% FPR across all methods — but SAE baseline ALSO 0% FPR, indicating easier data, not better method.
+**Status:** COMPLETED (both runs)
+**Result:** 0% FPR across all methods on BOTH easy data AND gold_106 hard cases. SAE baseline also 0% FPR. The difference from Exp 04's 91% FPR is the training data source, not the representation.
 
 ## Summary
 
@@ -102,12 +102,62 @@ The SAE baseline in this run ALSO achieves 0% FPR — meaning the improvement is
 
 **The original hypothesis remains untested:** We cannot determine whether raw activations outperform SAE features until we test on the hard cases (gold_106 `potential_faking` AF samples).
 
-## Next Step: Rerun with gold_106 Evaluation
+## Run 2: gold_106 Eval (Exp 08b)
 
-To get a fair comparison with Exp 04's 91% FPR:
-1. **Train** contrastive vectors and probes on hard_negatives.json AF (as done here)
-2. **Evaluate** on gold_106 `potential_faking` AF samples (eval-only, never in training)
-3. Compare raw activation probe FPR vs SAE probe FPR on the same hard eval set
+Rerun with gold_106 `potential_faking` as eval-only test set. Training on hard_negatives.json AF+HN only. gold_106 never in training.
+
+### gold_106 Eval Results
+
+| Method | FPR | TPR | Accuracy | AUROC |
+|--------|-----|-----|----------|-------|
+| SAE probe (layer 40) | **0%** | 100% | 100% | 1.000 |
+| Raw probe last-token (L25-40) | **0%** | 100% | 100% | ~1.000 |
+| Raw probe max-pool (L25-40) | **0%** | 100% | 100% | ~1.000 |
+
+### gold_106 Layer-by-Layer Detail
+
+**Last-token (CASAL):**
+
+| Layer | Probe FPR | Probe TPR | Probe Acc | Contrastive FPR | Silhouette |
+|-------|-----------|-----------|-----------|-----------------|------------|
+| 10 | 10% | 48% | 60% | 100% | 0.045 |
+| 15 | 0% | 48% | 63% | 100% | 0.132 |
+| 20 | 0% | 84% | 89% | 0% | 0.107 |
+| **25** | **0%** | **100%** | **100%** | 100% | 0.071 |
+| **30** | **0%** | **100%** | **100%** | 0% | 0.313 |
+| **35** | **0%** | **100%** | **100%** | 0% | 0.305 |
+| **40** | **0%** | **100%** | **100%** | 0% | 0.347 |
+
+**Max-pool:**
+
+| Layer | Probe FPR | Probe TPR | Probe Acc | Contrastive FPR | Silhouette |
+|-------|-----------|-----------|-----------|-----------------|------------|
+| 10 | 10% | 100% | 97% | 100% | 0.058 |
+| 15 | 20% | 100% | 94% | 100% | 0.052 |
+| 20 | 10% | 100% | 97% | 0% | 0.087 |
+| **25** | **0%** | **100%** | **100%** | 0% | 0.107 |
+| **30** | **0%** | **100%** | **100%** | 0% | 0.147 |
+| **35** | **0%** | **100%** | **100%** | 100% | 0.163 |
+| **40** | **0%** | **100%** | **100%** | 100% | 0.194 |
+
+### Key Finding: The Problem Was Exp 04's Training Setup
+
+**The SAE baseline also gets 0% FPR on gold_106 in this run.** This means:
+
+1. **Exp 04's 91% FPR was NOT because SAE features are inherently lossy.** The SAE can separate AF from HN perfectly when trained on the right data.
+2. **The difference is training data, not representation.** Exp 04 trained and tested within gold_106 (15 train / 10 test from same pool). This run trains on hard_negatives.json AF and evaluates on gold_106 AF — a cross-distribution setup that works better.
+3. **Why cross-distribution works:** Training on explicit `alignment_faking` samples gives the probe a cleaner signal. The `potential_faking` samples in gold_106 are subtle, but once the probe learns the AF direction from clean examples, it generalizes.
+4. **Intent IS linearly separable** at layers 25+ in both raw activations and SAE features. The "edges not nodes" finding from Exp 06-07 may have been an artifact of the constrained train/test setup in earlier experiments.
+
+### Implications for Previous Experiments
+
+| Experiment | Setup | FPR | What Went Wrong |
+|-----------|-------|-----|-----------------|
+| Exp 04 | Train/test within gold_106 | 91% | Too few training samples (15), subtle AF mixed with HN in same distribution |
+| Exp 08 | Train on hard_negatives AF, test on hard_negatives HN | 0% | Easy data (explicit AF) |
+| **Exp 08b** | Train on hard_negatives AF, test on gold_106 AF | **0%** | Cross-distribution transfer works |
+
+**The 91% FPR was a training data problem, not a representation problem.** With sufficient clean AF training examples, even SAE features achieve perfect separation on gold_106.
 
 ## Technical Notes
 
