@@ -16,6 +16,39 @@ OUTCOME: Application rejected. Research valid. Central mystery cracked open.
 
 ---
 
+## THE PLOT
+
+```
+  AUROC
+  1.0 ─                                          ●●●●●●●● fine-tuned detector
+      │                                        ●
+  0.9 ─                                       ●
+      │                                      ●
+  0.8 ─                                    ○○○○ sparse probe (152 neurons)
+      │
+  0.7 ─
+      │
+  0.6 ─
+      │
+  0.5 ─ ●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●
+      │ ○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○
+      │ ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ SAE probe (flat at 0.47)
+      └──┬───────────────────────────────┬──┬────── day
+       Dec 29                          Jan 29  30
+                                          ↑
+                                      GROK POINT
+                                      stop decomposing.
+                                      listen to the geometry.
+```
+
+```
+ ● fine-tuned detector    0.98 AUROC   opaque, 27B parameters, black box
+ ○ sparse linear probe    0.795 AUROC  interpretable, 152 neurons, auditable
+ ▬ SAE feature probe      0.47 AUROC   random — decomposition destroys the signal
+```
+
+---
+
 ## THE ARC (5 phases)
 
 ```
