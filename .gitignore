@@ -28,3 +28,7 @@ venv/
 .venv/
 reasoningflow/
 experiments/07b_dag_fullscale/cached_dags/
+experiments/10_redwood_dag/cached_dags/
+experiments/10b_organisms_dag/cached_dags/
+experiments/11_mech_interp_intent/saved_states/
+experiments/redwood_transcripts.json

@@ -1,0 +1,142 @@
+[
+  {
+    "feature": "frac_reflection",
+    "lr_coefficient": 1.0167069077630648,
+    "lr_abs_coefficient": 1.0167069077630648,
+    "rf_importance": 0.1778830636853935,
+    "rank": 1
+  },
+  {
+    "feature": "avg_node_text_length",
+    "lr_coefficient": 0.4230049048958786,
+    "lr_abs_coefficient": 0.4230049048958786,
+    "rf_importance": 0.10228732148758915,
+    "rank": 2
+  },
+  {
+    "feature": "n_edges",
+    "lr_coefficient": 0.39061797637460854,
+    "lr_abs_coefficient": 0.39061797637460854,
+    "rf_importance": 0.055731031140966135,
+    "rank": 3
+  },
+  {
+    "feature": "reflection_refute_count",
+    "lr_coefficient": -0.2714389767012072,
+    "lr_abs_coefficient": 0.2714389767012072,
+    "rf_importance": 0.09263518678144576,
+    "rank": 4
+  },
+  {
+    "feature": "frac_planning",
+    "lr_coefficient": 0.2531086879279449,
+    "lr_abs_coefficient": 0.2531086879279449,
+    "rf_importance": 0.021873082548371545,
+    "rank": 5
+  },
+  {
+    "feature": "frac_conclusion",
+    "lr_coefficient": 0.19621830437139617,
+    "lr_abs_coefficient": 0.19621830437139617,
+    "rf_importance": 0.007949223635881296,
+    "rank": 6
+  },
+  {
+    "feature": "n_nodes",
+    "lr_coefficient": 0.18977702258589424,
+    "lr_abs_coefficient": 0.18977702258589424,
+    "rf_importance": 0.04360138207799049,
+    "rank": 7
+  },
+  {
+    "feature": "n_support",
+    "lr_coefficient": -0.17258527702343177,
+    "lr_abs_coefficient": 0.17258527702343177,
+    "rf_importance": 0.011222186506511822,
+    "rank": 8
+  },
+  {
+    "feature": "last_refute_position",
+    "lr_coefficient": 0.15056772439166918,
+    "lr_abs_coefficient": 0.15056772439166918,
+    "rf_importance": 0.04574844205539365,
+    "rank": 9
+  },
+  {
+    "feature": "reflection_refute_3path_count",
+    "lr_coefficient": -0.13010193215665133,
+    "lr_abs_coefficient": 0.13010193215665133,
+    "rf_importance": 0.08511728298739855,
+    "rank": 10
+  },
+  {
+    "feature": "has_planning_to_reflection",
+    "lr_coefficient": 0.07195297194227548,
+    "lr_abs_coefficient": 0.07195297194227548,
+    "rf_importance": 0.02581375753994427,
+    "rank": 11
+  },
+  {
+    "feature": "refute_minus_support",
+    "lr_coefficient": 0.060015665051193816,
+    "lr_abs_coefficient": 0.060015665051193816,
+    "rf_importance": 0.038026278550387295,
+    "rank": 12
+  },
+  {
+    "feature": "refl_to_refl_refute",
+    "lr_coefficient": 0.04132217792658292,
+    "lr_abs_coefficient": 0.04132217792658292,
+    "rf_importance": 0.035820167684096196,
+    "rank": 13
+  },
+  {
+    "feature": "refl_to_conc_refute",
+    "lr_coefficient": 0.03885255790648655,
+    "lr_abs_coefficient": 0.03885255790648655,
+    "rf_importance": 0.0036486356963434927,
+    "rank": 14
+  },
+  {
+    "feature": "first_refute_position",
+    "lr_coefficient": -0.027892877229484636,
+    "lr_abs_coefficient": 0.027892877229484636,
+    "rf_importance": 0.012905777814330235,
+    "rank": 15
+  },
+  {
+    "feature": "n_af_discriminative_2paths",
+    "lr_coefficient": -0.025497573253819152,
+    "lr_abs_coefficient": 0.025497573253819152,
+    "rf_importance": 0.1208270597260784,
+    "rank": 16
+  },
+  {
+    "feature": "refute_ratio",
+    "lr_coefficient": 0.02339703596194693,
+    "lr_abs_coefficient": 0.02339703596194693,
+    "rf_importance": 0.018081635227152056,
+    "rank": 17
+  },
+  {
+    "feature": "frac_reasoning",
+    "lr_coefficient": 0.020963812795225873,
+    "lr_abs_coefficient": 0.020963812795225873,
+    "rf_importance": 0.06555970384293959,
+    "rank": 18
+  },
+  {
+    "feature": "refute_chain_max_length",
+    "lr_coefficient": -0.007667620438560506,
+    "lr_abs_coefficient": 0.007667620438560506,
+    "rf_importance": 0.012652174759055508,
+    "rank": 19
+  },
+  {
+    "feature": "n_refute",
+    "lr_coefficient": -0.00022057676180667175,
+    "lr_abs_coefficient": 0.00022057676180667175,
+    "rf_importance": 0.022616606252731056,
+    "rank": 20
+  }
+]
