@@ -1,0 +1,142 @@
+Train: 200 AF + 200 non-AF, Gold: 51 AF + 55 aligned
+TEST 1: Single layer probes
+  L15: probe=0.647 contrastive=0.570 sep_d=0.170
+  L20: probe=0.663 contrastive=0.521 sep_d=0.074
+  L25: probe=0.677 contrastive=0.549 sep_d=0.205
+  L30: probe=0.676 contrastive=0.502 sep_d=0.053
+  L35: probe=0.712 contrastive=0.492 sep_d=0.001
+  L40: probe=0.717 contrastive=0.705 sep_d=0.824
+TEST 2: Multi-layer
+  L35_40: AUC=0.719 dim=10752
+  L25_30_35_40: AUC=0.713 dim=21504
+  L20_25_30_35_40: AUC=0.702 dim=26880
+  L15_20_25_30_35_40: AUC=0.693 dim=32256
+TEST 3: Regularization sweep
+  single_L40 l1_C0.0001: AUC=0.500 FPR=0.000 nz=0
+  single_L40 l1_C0.0005: AUC=0.500 FPR=0.000 nz=0
+  single_L40 l1_C0.001: AUC=0.500 FPR=0.000 nz=0
+  single_L40 l1_C0.005: AUC=0.500 FPR=0.000 nz=0
+  single_L40 l1_C0.01: AUC=0.616 FPR=0.982 nz=9
+  single_L40 l1_C0.05: AUC=0.711 FPR=0.945 nz=53
+  single_L40 l1_C0.1: AUC=0.703 FPR=0.927 nz=86
+  single_L40 l1_C0.5: AUC=0.687 FPR=0.927 nz=269
+/usr/lib/python3/dist-packages/sklearn/linear_model/_sag.py:329: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
+  warnings.warn("The max_iter was reached which means "
+  single_L40 l1_C1.0: AUC=0.690 FPR=0.945 nz=473
+  single_L40 l1_C5.0: AUC=0.718 FPR=0.945 nz=1732
+  single_L40 l1_C10.0: AUC=0.718 FPR=0.945 nz=3271
+  single_L40 l2_C0.0001: AUC=0.738 FPR=0.927 nz=5376
+  single_L40 l2_C0.0005: AUC=0.737 FPR=0.945 nz=5376
+  single_L40 l2_C0.001: AUC=0.737 FPR=0.945 nz=5376
+  single_L40 l2_C0.005: AUC=0.723 FPR=0.964 nz=5376
+  single_L40 l2_C0.01: AUC=0.723 FPR=0.964 nz=5376
+  single_L40 l2_C0.05: AUC=0.718 FPR=0.982 nz=5376
+  single_L40 l2_C0.1: AUC=0.717 FPR=0.964 nz=5376
+  single_L40 l2_C0.5: AUC=0.717 FPR=0.964 nz=5376
+  single_L40 l2_C1.0: AUC=0.717 FPR=0.964 nz=5376
+  single_L40 l2_C5.0: AUC=0.714 FPR=0.964 nz=5376
+  single_L40 l2_C10.0: AUC=0.714 FPR=0.964 nz=5376
+  multi_L25_30_35_40 l2_C0.0001: AUC=0.752 FPR=1.000
+  multi_L25_30_35_40 l2_C0.0005: AUC=0.741 FPR=0.982
+  multi_L25_30_35_40 l2_C0.001: AUC=0.732 FPR=0.982
+  multi_L25_30_35_40 l2_C0.005: AUC=0.722 FPR=0.982
+  multi_L25_30_35_40 l2_C0.01: AUC=0.721 FPR=0.982
+  multi_L25_30_35_40 l2_C0.05: AUC=0.718 FPR=0.982
+  multi_L25_30_35_40 l2_C0.1: AUC=0.718 FPR=0.982
+  multi_L25_30_35_40 l2_C0.5: AUC=0.716 FPR=0.982
+  multi_L25_30_35_40 l2_C1.0: AUC=0.713 FPR=0.982
+  multi_L25_30_35_40 l2_C5.0: AUC=0.712 FPR=0.982
+  multi_L25_30_35_40 l2_C10.0: AUC=0.711 FPR=0.982
+TEST 4: PCA on multi-layer
+  pca5_C0.001: AUC=0.697 FPR=0.891 var=0.346
+  pca5_C0.01: AUC=0.698 FPR=0.891 var=0.346
+  pca5_C0.1: AUC=0.698 FPR=0.891 var=0.346
+  pca5_C1.0: AUC=0.698 FPR=0.891 var=0.346
+  pca5_C10.0: AUC=0.698 FPR=0.891 var=0.346
+  pca10_C0.001: AUC=0.770 FPR=0.964 var=0.446
+  pca10_C0.01: AUC=0.771 FPR=0.945 var=0.446
+  pca10_C0.1: AUC=0.771 FPR=0.945 var=0.446
+  pca10_C1.0: AUC=0.771 FPR=0.945 var=0.446
+  pca10_C10.0: AUC=0.771 FPR=0.945 var=0.446
+  pca15_C0.001: AUC=0.771 FPR=0.945 var=0.511
+  pca15_C0.01: AUC=0.771 FPR=0.927 var=0.511
+  pca15_C0.1: AUC=0.771 FPR=0.927 var=0.511
+  pca15_C1.0: AUC=0.771 FPR=0.927 var=0.511
+  pca15_C10.0: AUC=0.771 FPR=0.927 var=0.511
+  pca20_C0.001: AUC=0.773 FPR=1.000 var=0.561
+  pca20_C0.01: AUC=0.775 FPR=1.000 var=0.561
+  pca20_C0.1: AUC=0.773 FPR=1.000 var=0.561
+  pca20_C1.0: AUC=0.773 FPR=1.000 var=0.561
+  pca20_C10.0: AUC=0.773 FPR=1.000 var=0.561
+  pca25_C0.001: AUC=0.744 FPR=0.964 var=0.599
+  pca25_C0.01: AUC=0.737 FPR=0.964 var=0.599
+  pca25_C0.1: AUC=0.735 FPR=0.964 var=0.599
+  pca25_C1.0: AUC=0.734 FPR=0.964 var=0.599
+  pca25_C10.0: AUC=0.734 FPR=0.964 var=0.599
+  pca30_C0.001: AUC=0.737 FPR=0.945 var=0.630
+  pca30_C0.01: AUC=0.732 FPR=0.945 var=0.630
+  pca30_C0.1: AUC=0.731 FPR=0.945 var=0.630
+  pca30_C1.0: AUC=0.731 FPR=0.945 var=0.630
+  pca30_C10.0: AUC=0.731 FPR=0.945 var=0.630
+  pca50_C0.001: AUC=0.711 FPR=0.964 var=0.717
+  pca50_C0.01: AUC=0.673 FPR=0.982 var=0.717
+  pca50_C0.1: AUC=0.634 FPR=0.945 var=0.717
+  pca50_C1.0: AUC=0.629 FPR=0.945 var=0.717
+  pca50_C10.0: AUC=0.627 FPR=0.945 var=0.717
+  pca100_C0.001: AUC=0.712 FPR=1.000 var=0.827
+  pca100_C0.01: AUC=0.664 FPR=1.000 var=0.827
+  pca100_C0.1: AUC=0.631 FPR=0.982 var=0.827
+  pca100_C1.0: AUC=0.617 FPR=0.982 var=0.827
+  pca100_C10.0: AUC=0.607 FPR=0.982 var=0.827
+  pca200_C0.001: AUC=0.723 FPR=0.982 var=0.926
+  pca200_C0.01: AUC=0.703 FPR=0.964 var=0.926
+  pca200_C0.1: AUC=0.685 FPR=0.945 var=0.926
+  pca200_C1.0: AUC=0.680 FPR=0.945 var=0.926
+  pca200_C10.0: AUC=0.677 FPR=0.945 var=0.926
+  pca300_C0.001: AUC=0.727 FPR=0.982 var=0.974
+  pca300_C0.01: AUC=0.706 FPR=0.964 var=0.974
+  pca300_C0.1: AUC=0.684 FPR=0.964 var=0.974
+  pca300_C1.0: AUC=0.671 FPR=0.964 var=0.974
+  pca300_C10.0: AUC=0.663 FPR=0.964 var=0.974
+TEST 4b: PCA on L40 only
+  L40_pca5_C0.001: AUC=0.687 FPR=0.909 var=0.344
+  L40_pca5_C0.01: AUC=0.690 FPR=0.909 var=0.344
+  L40_pca5_C0.1: AUC=0.689 FPR=0.909 var=0.344
+  L40_pca5_C1.0: AUC=0.689 FPR=0.909 var=0.344
+  L40_pca10_C0.001: AUC=0.730 FPR=0.927 var=0.454
+  L40_pca10_C0.01: AUC=0.718 FPR=0.927 var=0.454
+  L40_pca10_C0.1: AUC=0.716 FPR=0.927 var=0.454
+  L40_pca10_C1.0: AUC=0.714 FPR=0.927 var=0.454
+  L40_pca15_C0.001: AUC=0.745 FPR=0.873 var=0.527
+  L40_pca15_C0.01: AUC=0.737 FPR=0.873 var=0.527
+  L40_pca15_C0.1: AUC=0.736 FPR=0.873 var=0.527
+  L40_pca15_C1.0: AUC=0.735 FPR=0.873 var=0.527
+  L40_pca20_C0.001: AUC=0.760 FPR=0.873 var=0.580
+  L40_pca20_C0.01: AUC=0.766 FPR=0.891 var=0.580
+  L40_pca20_C0.1: AUC=0.764 FPR=0.909 var=0.580
+  L40_pca20_C1.0: AUC=0.764 FPR=0.909 var=0.580
+  L40_pca30_C0.001: AUC=0.737 FPR=0.927 var=0.658
+  L40_pca30_C0.01: AUC=0.718 FPR=0.945 var=0.658
+  L40_pca30_C0.1: AUC=0.719 FPR=0.945 var=0.658
+  L40_pca30_C1.0: AUC=0.723 FPR=0.945 var=0.658
+  L40_pca50_C0.001: AUC=0.718 FPR=0.945 var=0.747
+  L40_pca50_C0.01: AUC=0.697 FPR=0.927 var=0.747
+  L40_pca50_C0.1: AUC=0.705 FPR=0.927 var=0.747
+  L40_pca50_C1.0: AUC=0.709 FPR=0.909 var=0.747
+  L40_pca100_C0.001: AUC=0.717 FPR=0.945 var=0.858
+  L40_pca100_C0.01: AUC=0.695 FPR=0.945 var=0.858
+  L40_pca100_C0.1: AUC=0.673 FPR=0.855 var=0.858
+  L40_pca100_C1.0: AUC=0.661 FPR=0.836 var=0.858
+  L40_pca200_C0.001: AUC=0.730 FPR=0.945 var=0.946
+  L40_pca200_C0.01: AUC=0.712 FPR=0.982 var=0.946
+  L40_pca200_C0.1: AUC=0.694 FPR=0.982 var=0.946
+  L40_pca200_C1.0: AUC=0.692 FPR=0.964 var=0.946
+  L40_pca300_C0.001: AUC=0.734 FPR=0.945 var=0.982
+  L40_pca300_C0.01: AUC=0.716 FPR=0.945 var=0.982
+  L40_pca300_C0.1: AUC=0.710 FPR=0.945 var=0.982
+  L40_pca300_C1.0: AUC=0.707 FPR=0.945 var=0.982
+
+Saved results.json
+
+BEST: pca_multi/pca20_C0.01 AUC=0.775
+Previous best (Exp 11): AUC=0.714

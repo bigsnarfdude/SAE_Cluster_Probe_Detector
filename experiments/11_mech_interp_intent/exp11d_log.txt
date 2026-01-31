@@ -1,0 +1,57 @@
+Train: 1340 AF + 1340 non-AF, Gold: 51 AF + 55 aligned
+
+TEST 1: Fine L1 sweep on L40
+  l1_C0.02: AUC=0.770 FPR=0.945 nz=78
+  l1_C0.025: AUC=0.782 FPR=0.945 nz=98
+  l1_C0.03: AUC=0.784 FPR=0.964 nz=105
+  l1_C0.035: AUC=0.793 FPR=0.964 nz=124
+  l1_C0.04: AUC=0.791 FPR=0.927 nz=136
+  l1_C0.045: AUC=0.795 FPR=0.927 nz=152
+  l1_C0.05: AUC=0.791 FPR=0.909 nz=174
+  l1_C0.055: AUC=0.790 FPR=0.927 nz=180
+  l1_C0.06: AUC=0.789 FPR=0.927 nz=199
+  l1_C0.065: AUC=0.788 FPR=0.927 nz=213
+  l1_C0.07: AUC=0.785 FPR=0.909 nz=235
+  l1_C0.08: AUC=0.786 FPR=0.873 nz=274
+  l1_C0.09: AUC=0.784 FPR=0.836 nz=300
+
+TEST 2: 5-fold CV on training set (C=0.05)
+  Fold 1: AUC=0.968 nz=144
+  Fold 2: AUC=0.953 nz=130
+  Fold 3: AUC=0.975 nz=143
+  Fold 4: AUC=0.962 nz=143
+  Fold 5: AUC=0.951 nz=149
+  Mean AUC: 0.962 +/- 0.009
+
+TEST 3: Best model weight analysis
+  Best model: 174 nonzero dims, AUC=0.791
+  Top AF dims: [2465, 4145, 3731, 1291, 2133]
+  Top aligned dims: [924, 4374, 3597, 4270, 1424]
+
+TEST 4: Top-k dimension ablation
+  top-5: AUC=0.557 FPR=0.782
+  top-10: AUC=0.625 FPR=0.909
+  top-20: AUC=0.682 FPR=0.891
+  top-30: AUC=0.732 FPR=0.873
+  top-50: AUC=0.760 FPR=0.818
+  top-80: AUC=0.779 FPR=0.855
+  top-100: AUC=0.788 FPR=0.818
+  top-150: AUC=0.763 FPR=0.709
+  top-174: AUC=0.773 FPR=0.709
+
+TEST 5: L1 on L35_40 concatenated
+  L35_40 l1_C0.01: AUC=0.726 FPR=0.982 nz=51
+/usr/lib/python3/dist-packages/sklearn/linear_model/_sag.py:329: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
+  warnings.warn("The max_iter was reached which means "
+  L35_40 l1_C0.03: AUC=0.770 FPR=1.000 nz=133
+/usr/lib/python3/dist-packages/sklearn/linear_model/_sag.py:329: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
+  warnings.warn("The max_iter was reached which means "
+  L35_40 l1_C0.05: AUC=0.765 FPR=1.000 nz=201
+/usr/lib/python3/dist-packages/sklearn/linear_model/_sag.py:329: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
+  warnings.warn("The max_iter was reached which means "
+  L35_40 l1_C0.07: AUC=0.773 FPR=1.000 nz=289
+/usr/lib/python3/dist-packages/sklearn/linear_model/_sag.py:329: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
+  warnings.warn("The max_iter was reached which means "
+  L35_40 l1_C0.1: AUC=0.773 FPR=0.964 nz=422
+
+Saved results to /home/ubuntu/results_11d/results.json
