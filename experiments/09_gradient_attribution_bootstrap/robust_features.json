@@ -1,0 +1,13 @@
+{
+  "description": "Bootstrap-stable SAE features from Experiment 09",
+  "stability_threshold": 0.8,
+  "n_bootstrap": 100,
+  "top_k_used": 100,
+  "features": [
+    {
+      "feature_id": 10904,
+      "stability_score": 0.97,
+      "gradient_score": 3.2831899633885275e-13
+    }
+  ]
+}
