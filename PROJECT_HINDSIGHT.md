@@ -1,6 +1,6 @@
 # PROJECT HINDSIGHT
 ### Alignment Faking Detection Research Retrospective
-### Dec 29 2025 - Jan 30 2026 | Vincent Ohprecio
+### Dec 29 2025 - Jan 30 2026 | BigsnarfDude
 
 ---
 
