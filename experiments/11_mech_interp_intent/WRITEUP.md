@@ -491,6 +491,98 @@ non-AF states cluster, not the mechanism that produces different outputs.
 
 ---
 
+## Detector vs Validator: Cascade Architecture
+
+### What This Probe Actually Is
+
+This probe is a **validation method**, not a production detector.
+
+- A **detector** says "this sample is AF" — needs low FPR to be useful.
+- A **validator** says "your detector's signal is real and here's why" — needs
+  high AUROC to rank correctly.
+
+Our probe has AUROC=0.795 but FPR=0.93. It ranks AF above aligned 80% of the
+time, but as a binary yes/no classifier it flags almost everything. That's a
+validator: good at explaining signal, bad at making decisions.
+
+### The Two-Stage Cascade
+
+The correct deployment is a pipeline where the black-box detector and the
+interpretable probe serve different roles:
+
+```
+┌─────────────────────────────────────────────────────────┐
+│ Stage 1: Black-Box SFT Detector (AUROC ≈ 0.9)          │
+│   - Fast inference, high accuracy, opaque               │
+│   - Input: raw scratchpad text                          │
+│   - Output: AF probability score                        │
+│   - Action: flag candidates above threshold             │
+└──────────────────────┬──────────────────────────────────┘
+                       │ flagged candidates
+                       ▼
+┌─────────────────────────────────────────────────────────┐
+│ Stage 2: Sparse 152-Dim Probe (AUROC ≈ 0.795)          │
+│   - Extract layer 40 hidden states (requires model)     │
+│   - Project onto 152 selected dimensions                │
+│   - Output: per-dimension activation breakdown          │
+│   - Action: explain WHY the detector flagged this       │
+│   "Neurons 924 (-0.36), 2465 (+0.21), 4145 (+0.17)     │
+│    contributed most to the AF classification"            │
+└──────────────────────┬──────────────────────────────────┘
+                       │ evidence report
+                       ▼
+┌─────────────────────────────────────────────────────────┐
+│ Stage 3: Human Review                                   │
+│   - Sees detector score + interpretable evidence        │
+│   - Can verify: do the activated neurons make sense?    │
+│   - Can override: detector says AF but probe disagrees  │
+└─────────────────────────────────────────────────────────┘
+```
+
+This is the same pattern used in medical AI — a neural net detects cancer, then
+a separate interpretable model highlights which scan regions triggered the
+detection. The interpretable model doesn't need to match the detector's accuracy;
+it needs to provide auditable evidence.
+
+### Closing the 10-Point Gap Without Losing Interpretability
+
+The 10-point AUROC gap (0.795 vs ~0.9) between the sparse probe and black-box
+detectors comes from three sources: non-linearity, multi-layer information, and
+training data. Three approaches to close it, all preserving interpretability:
+
+**Approach 1: Cluster the 152 dimensions into intent circuits**
+- K-means or hierarchical clustering on the 152 activation patterns across
+  training samples
+- If the 152 dims group into 5-8 clusters, each cluster is an interpretable
+  "intent circuit" (e.g., "strategic planning neurons", "context awareness
+  neurons", "compliance neurons")
+- Train a probe on cluster-level features (mean activation per cluster)
+- Adds non-linearity via feature engineering while every cluster remains nameable
+- Runnable on cached states, no GPU needed
+
+**Approach 2: Sparse MLP on selected dimensions (152 → 32 → 1)**
+- Use only the 152 L1-selected dimensions as input
+- One hidden layer with 32 units captures non-linear interactions between dims
+- Each hidden unit is an interpretable "intent feature" — a learned combination
+  of the 152 neurons, inspectable via its 152 input weights
+- Could close 3-5 AUROC points based on typical linear-to-MLP gains
+- Runnable on cached states, no GPU needed
+
+**Approach 3: Ensemble agreement scoring**
+- Run both the black-box detector (AUROC=0.9) and sparse probe (AUROC=0.795)
+- When both agree → high confidence, no explanation needed
+- When they disagree → flag for review, probe explains its reasoning
+- Agreement-weighted ensemble AUROC will exceed both individual models
+- Still fully interpretable: every prediction comes with a 152-dim breakdown
+- The ensemble doesn't sacrifice interpretability because the probe's role is
+  explanation, not replacement
+
+**The key insight:** You don't have to choose between accuracy and
+interpretability. Use the black-box for accuracy, use the probe for
+interpretability. The cascade gives you both.
+
+---
+
 ## Conclusions
 
 1. **AF intent is detectable in dense representations.** A linear probe on 152
