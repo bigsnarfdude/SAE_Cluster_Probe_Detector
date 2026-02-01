@@ -1,4 +1,4 @@
-# SAE Cluster Probe Detector
+# SAE Cluster Probe Detector Experiments
 
 Systematic evaluation of interpretability methods for alignment faking (AF) detection in LLMs. Tests SAE features, DAG structural patterns, contrastive steering, gradient attribution, and linear probes on hidden states against Anthropic's gold_106 eval set.
 
